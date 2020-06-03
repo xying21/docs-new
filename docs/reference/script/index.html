@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Script · Nervos CKB Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="CKB is dedicated to a brand new verification model：CKB VM is used to perform a series of validation rules to determine if transaction is valid given transaction&#x27;s inputs and outputs. Every transaction represents a change of state transition, resulting in **cells transition**, the validation rules are included in cells&#x27; `lock script` and `type script` in the transaction."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Script · Nervos CKB Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://nervosnetwork.github.io/docs-new/"/><meta property="og:description" content="CKB is dedicated to a brand new verification model：CKB VM is used to perform a series of validation rules to determine if transaction is valid given transaction&#x27;s inputs and outputs. Every transaction represents a change of state transition, resulting in **cells transition**, the validation rules are included in cells&#x27; `lock script` and `type script` in the transaction."/><meta property="og:image" content="https://nervosnetwork.github.io/docs-new/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://nervosnetwork.github.io/docs-new/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/docs-new/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/docs-new/js/scrollSpy.js"></script><link rel="stylesheet" href="/docs-new/css/main.css"/><script src="/docs-new/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/docs-new/"><img class="logo" src="/docs-new/img/favicon.png" alt="Nervos CKB Docs"/><h2 class="headerTitleWithLogo">Nervos CKB Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs-new/docs/basics/introduction" target="_self">Basics</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/reference/introduction" target="_self">Reference</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/labs/introduction" target="_self">Labs</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/integrate/introduction" target="_self">Integrate</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/essays/introduction" target="_self">Essays</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Reference</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/overview">Nervos CKB docs overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Basics</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/introduction">Basics introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Reference</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/introduction">Reference introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/cell">Cell</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs-new/docs/reference/script">Script</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/transaction">Transaction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Labs</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/labs/introduction">Labs introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/labs/sudtbycapsule">Write a SUDT script by Capsule</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Integrate</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/integrate/introduction">Integrate introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Projects</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/projects/introduction">Projects introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Essays</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/essays/introduction">Essays introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/essays/devchain">How to use a development blockchain</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Community</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/community/introduction">Community introduction</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Script</h1></header><article><div><span><p>CKB is dedicated to a brand new verification model：CKB VM is used to perform a series of validation rules to determine if transaction is valid given transaction's inputs and outputs. Every transaction represents a change of state transition, resulting in <strong>cells transition</strong>, the validation rules are included in cells' <code>lock script</code> and <code>type script</code> in the transaction.</p>
+<p>Notes: we will distinguish between <strong>script code</strong> and <strong>script</strong>：</p>
+<ul>
+<li><strong>script code</strong> refers to the program you write and compile to use on CKB which is the implementation of validation rules.</li>
+<li><strong>script</strong> refers to the script data structure used in <code>lock script</code> and <code>type script</code>.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="data-structure"></a><a href="#data-structure" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Data Structure</h2>
+<p>Both <code>lock script</code> and <code>type script</code> have the same type：<strong>Script</strong></p>
+<p><strong>Example：</strong></p>
+<pre><code class="hljs">     "<span class="hljs-keyword">lock</span><span class="hljs-string">": {
+        "</span>hashType<span class="hljs-string">": "</span><span class="hljs-keyword">type</span><span class="hljs-string">",
+        "</span>codeHash<span class="hljs-string">": "</span><span class="hljs-number">0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8</span><span class="hljs-string">",
+        "</span>args<span class="hljs-string">": "</span><span class="hljs-number">0xc285e812f6a35c2479d6f5b9bbaa357dd4e60da1</span><span class="hljs-string">"
+      },
+      "</span><span class="hljs-keyword">type</span><span class="hljs-string">": {
+        "</span>hashType<span class="hljs-string">": "</span><span class="hljs-keyword">data</span><span class="hljs-string">",
+        "</span>codeHash<span class="hljs-string">": "</span><span class="hljs-number">0xe7f93d7120de3ca8548b34d2ab9c40fe662eec35023f07e143797789895b4869</span><span class="hljs-string">",
+        "</span>args<span class="hljs-string">": "</span><span class="hljs-number">0x42b5561f13c2a8f7c710843bea7d179656dc6133a98b7d763cebc6e74c8ba72a</span><span class="hljs-string">"
+      }
+</span></code></pre>
+<p>A script has three fields：</p>
+<ul>
+<li><code>codeHash</code>: The hash of ELF formatted RISC-V binary that contains a CKB script.</li>
+<li><code>hashType</code>: The interpretation of <code>codeHash</code> when looking for matched dep cells.
+<ul>
+<li>If this is <code>data</code>, <code>code_hash</code> should match the blake2b hash of data in a dep cell;</li>
+<li>if this is <code>type</code>, <code>code_hash</code> should instead match the type script hash of a dep cell.
+<ul>
+<li>For space efficiency consideration, the actual script is attached to current transaction as a dep cell. Depending on the value of <code>hash_type</code>, the hash specified here should either match the hash of cell data part in the dep cell, or the hash of type script in the dep cell. The actual binary is loaded into an CKB-VM instance when they are specified upon the transaction verification.</li>
+</ul></li>
+</ul></li>
+<li><code>args</code>: The argument as the script input. The argument here is imported into the CKB-VM instance as the input argument for the scripts. For example, when people use the same default lock script code, each of them may hold their own pubkey hash, <code>args</code> is to hold pubkey hash.In this way，every user of CKB can have different lock script, while sharing the same lock script code.</li>
+</ul>
+<p>If you want to implement the validation rules，please follow:</p>
+<ul>
+<li>Develop the script code and compile your code into RISC-V binary. You can find some examples in the <a href="https://github.com/nervosnetwork/ckb-system-scripts">ckb-system-scripts</a> and <a href="https://github.com/nervosnetwork/ckb-miscellaneous-scripts">ckb-miscellaneous-scripts</a></li>
+<li>Create a cell which stores the binary as <code>outputs_data</code> in a transaction, and send the transaction to the chain. The cell is called “code cell”.</li>
+<li>Construct a script which <code>hashType</code> is <code>data</code>, and <code>codeHash</code> is the hash of the built binary.</li>
+<li>Use the script as the type script or lock script in a cell.</li>
+<li>If the script has to run in a transaction, include the code cell's <code>OutPoint</code> in the <code>cell_deps</code>.</li>
+</ul>
+<p>As mentioned in <a href="/docs-new/docs/reference/cell">Cell</a>,  <code>lock script</code> stores the ownership of the cell and <code>type script</code> stores the validation logic you need in the cells transition.</p>
+<h2><a class="anchor" aria-hidden="true" id="lock-script"></a><a href="#lock-script" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Lock Script</h2>
+<p>There are several use rules：</p>
+<ul>
+<li>Every cell has a lock script.</li>
+<li>The lock script must run when the cell is used as an transaction input.</li>
+<li>A transaction is valid only when all the lock scripts in the transaction inputs exit normally (without exceptions).</li>
+</ul>
+<p>Since this script runs on inputs, it acts as the lock to control who can unlock and destroy the cell, as well as spend the capacity stored in the cell.</p>
+<p>The following is an example lock script code which always exits normally. Anyone can destroy the cell if it uses this code as the lock script.</p>
+<pre><code class="hljs"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span> </span>{
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>The most popular way to lock a digital asset is the digital signature created by asymmetric cryptography.
+The signature algorithm has two requirements:</p>
+<ul>
+<li>The cell must contain the information for the public key, so only the real private key can create a valid signature.</li>
+<li>The transaction must contain the signatures, which usually signs the whole transaction as the message.</li>
+</ul>
+<p>When you use the default <a href="https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_sighash_all.c">secp256k1 lock script</a>,It’s recommended to store the public key hash in the lock script’s <code>args</code>
+field, and store the signature in the <code>transaction witness</code>.</p>
+<h2><a class="anchor" aria-hidden="true" id="type-script"></a><a href="#type-script" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Type Script</h2>
+<p>Type script is very similar to lock script, with two differences:</p>
+<ul>
+<li>Type script is optional.</li>
+<li>In a transaction, CKB must run the type scripts in both inputs and outputs.</li>
+</ul>
+<p>Although we can only keep one type of script in the cell, we don’t want to mess the different responsibilities in a single script. The lock script is only executed for inputs, so its primary responsibility is protecting the cells. Only the owner is allowed to use the cell as input and spend any assets stored in it.</p>
+<p>The type script is intended to store the validation logic you need in transactions. A typical use case of type script is to implement a UDT (user-defined token): the token issuance must be authorized through transaction outputs.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs-new/docs/reference/cell"><span class="arrow-prev">← </span><span>Cell</span></a><a class="docs-next button" href="/docs-new/docs/reference/transaction"><span>Transaction</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#data-structure">Data Structure</a></li><li><a href="#lock-script">Lock Script</a></li><li><a href="#type-script">Type Script</a></li></ul></nav></div></div></body></html>

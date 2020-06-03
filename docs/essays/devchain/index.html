@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>How to use a development blockchain · Nervos CKB Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Nervos CKB supports a `dev` mode that is particularly useful for development and testing. We also support to modify some parameters to run quickly for improving development efficiency. In addition，we also provide  `ckb-cli`  to support transfer、query balance (with local index)  and etc. "/><meta name="docsearch:language" content="en"/><meta property="og:title" content="How to use a development blockchain · Nervos CKB Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://nervosnetwork.github.io/docs-new/"/><meta property="og:description" content="Nervos CKB supports a `dev` mode that is particularly useful for development and testing. We also support to modify some parameters to run quickly for improving development efficiency. In addition，we also provide  `ckb-cli`  to support transfer、query balance (with local index)  and etc. "/><meta property="og:image" content="https://nervosnetwork.github.io/docs-new/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://nervosnetwork.github.io/docs-new/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/docs-new/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/docs-new/js/scrollSpy.js"></script><link rel="stylesheet" href="/docs-new/css/main.css"/><script src="/docs-new/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/docs-new/"><img class="logo" src="/docs-new/img/favicon.png" alt="Nervos CKB Docs"/><h2 class="headerTitleWithLogo">Nervos CKB Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs-new/docs/basics/introduction" target="_self">Basics</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/reference/introduction" target="_self">Reference</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/labs/introduction" target="_self">Labs</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/integrate/introduction" target="_self">Integrate</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/essays/introduction" target="_self">Essays</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Essays</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/overview">Nervos CKB docs overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Basics</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/introduction">Basics introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Reference</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/introduction">Reference introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/cell">Cell</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/script">Script</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/transaction">Transaction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Labs</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/labs/introduction">Labs introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/labs/sudtbycapsule">Write a SUDT script by Capsule</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Integrate</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/integrate/introduction">Integrate introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Projects</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/projects/introduction">Projects introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Essays</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/essays/introduction">Essays introduction</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs-new/docs/essays/devchain">How to use a development blockchain</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Community</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/community/introduction">Community introduction</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">How to use a development blockchain</h1></header><article><div><span><p>Nervos CKB supports a <code>dev</code> mode that is particularly useful for development and testing. We also support to modify some parameters to run quickly for improving development efficiency. In addition，we also provide  <code>ckb-cli</code>  to support transfer、query balance (with local index)  and etc.</p>
+<p>You may follow these instructions which are explained in detail below：</p>
+<ul>
+<li>Initialize the development blockchain</li>
+<li>Modify parameters to run quickly</li>
+<li>Run the development blockchain</li>
+<li>Use <code>ckb-cli</code>  to transfer CKB</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="initialize-the-development-blockchain"></a><a href="#initialize-the-development-blockchain" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Initialize the development blockchain</h2>
+<ul>
+<li>Download the latest ckb binary file from the CKB releases page on <a href="https://github.com/nervosnetwork/ckb/releases">GitHub</a>, then check if it works with:</li>
+</ul>
+<pre><code class="hljs">ckb --<span class="hljs-keyword">version</span>
+ckb-<span class="hljs-keyword">cli</span> --<span class="hljs-keyword">version</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">ckb 0.32.0-pre (80e0bef 2020-05-06)
+ckb-cli 0.31.0 (a531b3b 2020-04-17)
+</code></pre>
+<p></details></p>
+<ul>
+<li>Initialize the development blockchain, will generate some configuration files</li>
+</ul>
+<pre><code class="hljs">ckb init <span class="hljs-comment">--chain dev</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">WARN: mining feature is disabled because of lacking the block assembler config options
+Initialized CKB directory <span class="hljs-keyword">in</span> /PATH/ckb_v0.32.0-rc1_x86_64-apple-darwin-dev
+create specs/dev.toml
+create ckb.toml
+create ckb-miner.toml
+</code></pre>
+<p></details></p>
+<h2><a class="anchor" aria-hidden="true" id="modify-parameters-to-run-quickly"></a><a href="#modify-parameters-to-run-quickly" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Modify parameters to run quickly</h2>
+<p>In the development process, sometimes we want to make the blockchain to run quickly for getting results faster.We will introduce how to modify parameters to make it.</p>
+<h3><a class="anchor" aria-hidden="true" id="change-the-epoch-length"></a><a href="#change-the-epoch-length" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Change the epoch length</h3>
+<p>You can change the <code>genesis_epoch_length</code> in <code>specs/dev.toml</code></p>
+<pre><code class="hljs">[params]
+initial_primary_epoch_reward = <span class="hljs-number">1</span>_917_808_21917808
+secondary_epoch_reward = <span class="hljs-number">613</span>_698_63013698
+max_block_cycles = <span class="hljs-number">10</span>_000_000_000
+cellbase_maturity = <span class="hljs-number">0</span>
+primary_epoch_reward_halving_interval = <span class="hljs-number">8760</span>
+epoch_duration_target = <span class="hljs-number">14400</span>
+**genesis_epoch_length** = <span class="hljs-number">1000</span> （The unit of meansurement <span class="hljs-keyword">is</span> <span class="hljs-string">"block"</span>.）
+
+</code></pre>
+<p>The default epoch length is 1000 blocks，if <code>genesis_epoch_length = 100</code> that means the epoch lengh is 100 blocks.</p>
+<h3><a class="anchor" aria-hidden="true" id="change-the-mining-idle-interval"></a><a href="#change-the-mining-idle-interval" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Change the mining idle interval</h3>
+<p>Change the <code>value</code> in <code>ckb-miner.toml</code></p>
+<pre><code class="hljs"><span class="hljs-string">[[miner.workers]]</span>
+worker_type = <span class="hljs-string">"Dummy"</span>
+delay_type = <span class="hljs-string">"Constant"</span>
+**value** = <span class="hljs-number">5000</span> (The unit of measurement is <span class="hljs-string">"ms"</span>.)
+</code></pre>
+<p>The default mining idle interval is 5000ms, if <code>value = 50</code> that means the mining idle interval is 50ms.</p>
+<h2><a class="anchor" aria-hidden="true" id="run-the-development-blockchain"></a><a href="#run-the-development-blockchain" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run the development blockchain</h2>
+<p>We need to run a miner for running the development blockchain, firstly configure the <code>block-assembler</code> in <code>ckb.toml</code> for mining.</p>
+<h3><a class="anchor" aria-hidden="true" id="configure-block-assembler"></a><a href="#configure-block-assembler" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>configure <code>block-assembler</code></h3>
+<ul>
+<li>Use <code>ckb-cli</code> to generate a miner account, we will use <code>lock_arg</code> next step, so please backup it.</li>
+</ul>
+<pre><code class="hljs">ckb-cli account <span class="hljs-keyword">new</span><span class="hljs-type"></span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">Your new account is locked with a password. Please give a password. Do not forget this password.
+Password: 
+Repeat password: 
+address:
+  mainnet: ckb1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qud28sv
+  testnet: ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus
+  lock_arg: 0x8d627decece439977a3a0a97815b63debaff2874
+lock_hash: 0x3c78a0ea094f0d7abedde67f95143bcf8af391458cec798ceeaa3549ff53c4cb
+</code></pre>
+<p></details></p>
+<ul>
+<li>Fill in  <code>args</code> and  <code>message</code> of the <code>block_assembler</code></li>
+</ul>
+<pre><code class="hljs">[<span class="hljs-meta">block_assembler</span>]
+code_hash = <span class="hljs-string">"0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"</span> <span class="hljs-comment">//don't have to change</span>
+args = <span class="hljs-string">"0x8d627decece439977a3a0a97815b63debaff2874"</span> <span class="hljs-comment">// the lock_arg </span>
+hash_type = <span class="hljs-string">"type"</span> <span class="hljs-comment">// don't need to change</span>
+message = <span class="hljs-string">"A 0x-prefixed hex string"</span><span class="hljs-comment">// "0x"(recommendation)</span>
+
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="run-the-development-blockchain-1"></a><a href="#run-the-development-blockchain-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run the development blockchain</h3>
+<ul>
+<li>Start a ckb node</li>
+</ul>
+<pre><code class="hljs">ckb <span class="hljs-keyword">run</span><span class="bash">
+</span></code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">2020-05-15 16:39:49.457 +08:00 main INFO sentry sentry is disabled
+2020-05-15 16:39:49.620 +08:00 main INFO ckb-memory-tracker track current process: unsupported
+2020-05-15 16:39:49.620 +08:00 main INFO main ckb version: 0.32.0-pre (80e0bef 2020-05-06)
+2020-05-15 16:39:49.620 +08:00 main INFO main chain genesis <span class="hljs-built_in">hash</span>: 0x120ab9abd48e3b82f93b88eba8c50a0e1304cc2fffb5573fb14b56c6348f2305
+2020-05-15 16:39:49.624 +08:00 NetworkRuntime INFO ckb-network p2p service event: ListenStarted { address: <span class="hljs-string">"/ip4/0.0.0.0/tcp/8115"</span> }
+2020-05-15 16:39:49.625 +08:00 NetworkRuntime INFO ckb-network Listen on address: /ip4/0.0.0.0/tcp/8115/p2p/QmcdT17iho5X7D4NGZKjzrgonQ4oQRGx5UHrwPbUWiaAwG
+</code></pre>
+<p></details></p>
+<ul>
+<li>Start a miner, you may open another terminal</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-attribute">ckb miner</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">2020-05-15 16:33:55.215 +08:00 main INFO sentry sentry is disabled
+Dummy-Worker ⠁ [00:00:00]
+Found! <span class="hljs-comment">#1 0x70949ff02180743faee29ed728d8afaf165d8922a45aa728d7187511f2a72b37</span>
+Found! <span class="hljs-comment">#2 0x74afc3bac2f085918a093181c046c767c2b8060a9ec6c5b503f1ef3468c7d6e0</span>
+Found! <span class="hljs-comment">#3 0x6570ec5c0d4434287cf53a99f23769dba923e511dced32e1f3462470fdf2fe99</span>
+Found! <span class="hljs-comment">#4 0x334cf2af7cedb70bad4dd2001bfe9ef043a98c3cd66f679636e6153cd3c1be64</span>
+</code></pre>
+<p></details></p>
+<h2><a class="anchor" aria-hidden="true" id="use-ckb-cli--to-transfer-ckb"></a><a href="#use-ckb-cli--to-transfer-ckb" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Use <code>ckb-cli</code>  to transfer CKB</h2>
+<p><code>ckb-cli</code> is included in the ckb releases，it’s the command line tool for CKB. You can use it to invoke RPC call to node、manage accounts、transfer/check balance、construct mock transactions, etc. You can refer to <a href="https://github.com/nervosnetwork/ckb-cli">ckb-cli</a>  for more details. We will introduce how to transfer CKB here.</p>
+<p><strong>Please note that <code>ckb-cli</code> is only used for developing/testing purpose.</strong></p>
+<ul>
+<li>Enter into the interface of  <strong>ckb-cli</strong></li>
+</ul>
+<pre><code class="hljs">ckb-<span class="hljs-keyword">cli</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">[  ckb-cli version ]: 0.31.0 (a531b3b 2020-04-17)
+[              url ]: http://127.0.0.1:8114 (network: Dev)
+[              <span class="hljs-built_in">pwd</span> ]: /Users/zengbing/Documents/projects/ckb_v0.32.0-rc1_x86_64-apple-darwin-dev
+[            color ]: <span class="hljs-literal">true</span>
+[            debug ]: <span class="hljs-literal">false</span>
+[    output format ]: yaml
+[ completion style ]: List
+[       edit style ]: Emacs
+[   index db state ]: Waiting <span class="hljs-keyword">for</span> first query
+</code></pre>
+<p></details></p>
+<ul>
+<li>Create a new account</li>
+</ul>
+<pre><code class="hljs">account <span class="hljs-keyword">new</span><span class="hljs-type"></span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">Your new account is locked with a password. Please give a password. Do not forget this password.
+Password:
+Repeat password:
+address:
+mainnet: ckb1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqw4c8mg
+testnet: ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
+lock_arg: 0xf4143a99934c34913a771a0b38bd1257cbf4ef32
+lock_hash: 0xea4db70029dd393789a6be0e4137a3e95cd8d20b2b028a0fc0eab07622a894f4
+</code></pre>
+<p></details></p>
+<ul>
+<li>Check the balance of miner account</li>
+</ul>
+<p>You have already created a miner account for mining above, we can check the balance:</p>
+<pre><code class="hljs"><span class="hljs-string">wallet </span><span class="hljs-built_in">get-capacity</span> <span class="hljs-built_in">--address</span> <span class="hljs-string">"miner's address"</span> 
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">CKB&gt; wallet get-capacity --address <span class="hljs-string">"ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus"</span>
+immature: 8027902.89083717 (CKB)
+total: 46253677.72927512 (CKB)
+</code></pre>
+<p></details></p>
+<ul>
+<li>Transfer 10000 CKB to the new account</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-string">wallet </span><span class="hljs-string">transfer </span><span class="hljs-built_in">--from-account</span> <span class="hljs-string">"miner's address"</span> <span class="hljs-built_in">--to-address</span> <span class="hljs-string">"new account's address"</span> <span class="hljs-built_in">--capacity</span> <span class="hljs-string">10000 </span>—<span class="hljs-string">tx-fee </span>0.<span class="hljs-string">00001
+</span></code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">CKB&gt; wallet transfer --from-account ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus --to-address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5 --capacity 10000 --tx-fee 0.00001
+Password: 
+0x1b66aafaaba5ce34de494f60374ef78e8f536bb3af9cab4fa63c0f29374c3f89
+</code></pre>
+<p></details></p>
+<ul>
+<li>Check the new account’s balance</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-built_in">get-capacity</span> —<span class="hljs-string">address </span><span class="hljs-string">"new account's address"</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">CKB&gt; wallet get-capacity —address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
+total: 10000.0 (CKB)
+</code></pre>
+<p></details></p>
+<p>The transfer successes !</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs-new/docs/essays/introduction"><span class="arrow-prev">← </span><span>Essays introduction</span></a><a class="docs-next button" href="/docs-new/docs/community/introduction"><span>Community introduction</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#initialize-the-development-blockchain">Initialize the development blockchain</a></li><li><a href="#modify-parameters-to-run-quickly">Modify parameters to run quickly</a><ul class="toc-headings"><li><a href="#change-the-epoch-length">Change the epoch length</a></li><li><a href="#change-the-mining-idle-interval">Change the mining idle interval</a></li></ul></li><li><a href="#run-the-development-blockchain">Run the development blockchain</a><ul class="toc-headings"><li><a href="#configure-block-assembler">configure <code>block-assembler</code></a></li><li><a href="#run-the-development-blockchain-1">Run the development blockchain</a></li></ul></li><li><a href="#use-ckb-cli--to-transfer-ckb">Use <code>ckb-cli</code>  to transfer CKB</a></li></ul></nav></div></div></body></html>
