@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Run a CKB Testnet Node · Nervos CKB Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="We have launched Aggron Testnet for developers to test their integration and smart contracts in real environment.The Aggron Testnet’s info has been published via Wiki:"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Run a CKB Testnet Node · Nervos CKB Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://nervosnetwork.github.io/docs-new/"/><meta property="og:description" content="We have launched Aggron Testnet for developers to test their integration and smart contracts in real environment.The Aggron Testnet’s info has been published via Wiki:"/><meta property="og:image" content="https://nervosnetwork.github.io/docs-new/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://nervosnetwork.github.io/docs-new/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/docs-new/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/docs-new/js/scrollSpy.js"></script><link rel="stylesheet" href="/docs-new/css/main.css"/><script src="/docs-new/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/docs-new/"><img class="logo" src="/docs-new/img/favicon.png" alt="Nervos CKB Docs"/><h2 class="headerTitleWithLogo">Nervos CKB Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs-new/docs/basics/introduction" target="_self">Basics</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/reference/introduction" target="_self">Reference</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/labs/introduction" target="_self">Labs</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/integrate/introduction" target="_self">Integrate</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/essays/introduction" target="_self">Essays</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Basics</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/overview">Nervos CKB docs overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Basics</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/introduction">Basics introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/devchain">Run a development CKB blockchain</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/mainnet">Run a CKB Mainnet Node</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs-new/docs/basics/testnet">Run a CKB Testnet Node</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/neuron">Neuron Wallet Guide</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Reference</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/introduction">Reference introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/cell">Cell</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/script">Script</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/transaction">Transaction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/rpc">JSON-RPC</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Labs</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/labs/introduction">Labs introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/labs/sudtbycapsule">Write a SUDT script by Capsule</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Integrate</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/integrate/introduction">Integrate introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Projects</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/projects/introduction">Projects introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Essays</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/essays/introduction">Essays introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Community</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/community/introduction">Community</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Run a CKB Testnet Node</h1></header><article><div><span><p>We have launched Aggron Testnet for developers to test their integration and smart contracts in real environment.The Aggron Testnet’s info has been published via Wiki:
+<a href="https://github.com/nervosnetwork/ckb/wiki/Chains">Chains</a> .Please refer it for more details. Because of the hash rate surge, Aggron will reset regularly.</p>
+<h3><a class="anchor" aria-hidden="true" id="run-a-ckb-testnet-node"></a><a href="#run-a-ckb-testnet-node" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run a CKB Testnet node</h3>
+<p><strong>System Requirements</strong></p>
+<p>Any modern computer with macOS/Linux/Windows operating system should be able to run a CKB node and mining programs. Alternatively, you can also use <a href="https://github.com/nervosnetwork/ckb/blob/develop/docs/run-ckb-with-docker.md">Docker</a> if your operating system is not properly supported by CKB for now.</p>
+<p>To run a CKB node, please follow the instructions explained in detail below:</p>
+<p>Step 1: Download the latest ckb binary file from the CKB releases page on [GitHub] (<a href="https://github.com/nervosnetwork/ckb/releases">https://github.com/nervosnetwork/ckb/releases</a>), then check if it works with:</p>
+<pre><code class="hljs">ckb --<span class="hljs-keyword">version</span> 
+ckb-<span class="hljs-keyword">cli</span> --<span class="hljs-keyword">version</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">ckb 0.32.1 (9ebc9ce 2020-05-29)
+ckb-cli 0.32.0 (0fc435d 2020-05-22)
+</code></pre>
+<p></details></p>
+<p><strong>Step 2: Connect to Aggron Testnet</strong></p>
+<ul>
+<li>Init CKB node with <code>ckb init --chain testnet</code></li>
+</ul>
+<pre><code class="hljs">ckb init <span class="hljs-comment">--chain testnet</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">WARN: mining feature is disabled because of lacking the block assembler config options
+Initialized CKB directory <span class="hljs-keyword">in</span> /PATH/ckb_v0.32.1_x86_64-apple-darwin
+create ckb.toml
+create ckb-miner.toml
+</code></pre>
+<p></details></p>
+<p><strong>Step 3: Start the CKB Testnet node</strong></p>
+<pre><code class="hljs">ckb <span class="hljs-keyword">run</span><span class="bash">
+</span></code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">2020-06-05 18:23:10.086 +08:00 main INFO sentry  **Notice**: The ckb process will send stack trace to sentry on Rust panics. This is enabled by default before mainnet, <span class="hljs-built_in">which</span> can be opted out by setting the option `dsn` to empty <span class="hljs-keyword">in</span> the config file. The DSN is now https://dda4f353e15f4b62800d273a2afe70c2@sentry.nervos.org/4
+2020-06-05 18:23:10.172 +08:00 main INFO main  Miner is disabled, edit ckb.toml to <span class="hljs-built_in">enable</span> it
+2020-06-05 18:23:10.176 +08:00 main INFO ckb-db  Initialize a new database
+2020-06-05 18:23:10.263 +08:00 main INFO ckb-db  Init database version 20191127135521
+2020-06-05 18:23:10.283 +08:00 main INFO ckb-memory-tracker  track current process: unsupported
+2020-06-05 18:23:10.284 +08:00 main INFO main  ckb version: 0.32.1 (9ebc9ce 2020-05-29)
+2020-06-05 18:23:10.284 +08:00 main INFO main  chain genesis <span class="hljs-built_in">hash</span>: 0x10639e0895502b5688a6be8cf69460d76541bfa4821629d86d62ba0aae3f9606
+2020-06-05 18:23:10.285 +08:00 main INFO ckb-network  Generate random key
+2020-06-05 18:23:10.285 +08:00 main INFO ckb-network  write random secret key to <span class="hljs-string">"/PATH/ckb_v0.32.1_x86_64-apple-darwin/data/network/secret_key"</span>
+2020-06-05 18:23:10.296 +08:00 NetworkRuntime INFO ckb-network  p2p service event: ListenStarted { address: <span class="hljs-string">"/ip4/0.0.0.0/tcp/8115"</span> }
+2020-06-05 18:23:10.298 +08:00 NetworkRuntime INFO ckb-network  Listen on address: /ip4/0.0.0.0/tcp/8115/p2p/QmWpdvd65BhJV3KVyidSkGjd3SuTdCSNgk1WuRpnggMLWj
+2020-06-05 18:23:10.303 +08:00 main INFO ckb-db  Initialize a new database
+2020-06-05 18:23:10.336 +08:00 main INFO ckb-db  Init database version 20191201091330
+2020-06-05 18:23:10.484 +08:00 NetworkRuntime INFO ckb-sync  SyncProtocol.connected peer=SessionId(1)
+2020-06-05 18:23:10.484 +08:00 NetworkRuntime INFO ckb-relay  RelayProtocol(1).connected peer=SessionId(1)
+2020-06-05 18:23:10.732 +08:00 NetworkRuntime INFO ckb-sync  Ignoring getheaders from peer=SessionId(1) because node is <span class="hljs-keyword">in</span> initial block download
+2020-06-05 18:23:10.927 +08:00 ChainService INFO ckb-chain  block: 1, <span class="hljs-built_in">hash</span>: 0xd5ac7cf8c34a975bf258a34f1c2507638487ab71aa4d10a9ec73704aa3abf9cd, epoch: 0(1/1000), total_diff: 0x1800060, txs: 1
+
+</code></pre>
+<p></details></p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs-new/docs/basics/mainnet"><span class="arrow-prev">← </span><span>Run a CKB Mainnet Node</span></a><a class="docs-next button" href="/docs-new/docs/basics/neuron"><span>Neuron Wallet Guide</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div></div></body></html>

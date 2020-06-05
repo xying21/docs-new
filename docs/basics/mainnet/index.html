@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Run a CKB Mainnet Node · Nervos CKB Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="*Fun Fact: Running a CKB Mainnet node not only helps contribute to the robustness and decentralized nature of the Network, it also means you do not need to rely on any 3rd party to provide data from the blockchain, which increases your security.*"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Run a CKB Mainnet Node · Nervos CKB Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://nervosnetwork.github.io/docs-new/"/><meta property="og:description" content="*Fun Fact: Running a CKB Mainnet node not only helps contribute to the robustness and decentralized nature of the Network, it also means you do not need to rely on any 3rd party to provide data from the blockchain, which increases your security.*"/><meta property="og:image" content="https://nervosnetwork.github.io/docs-new/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://nervosnetwork.github.io/docs-new/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/docs-new/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/docs-new/js/scrollSpy.js"></script><link rel="stylesheet" href="/docs-new/css/main.css"/><script src="/docs-new/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/docs-new/"><img class="logo" src="/docs-new/img/favicon.png" alt="Nervos CKB Docs"/><h2 class="headerTitleWithLogo">Nervos CKB Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs-new/docs/basics/introduction" target="_self">Basics</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/reference/introduction" target="_self">Reference</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/labs/introduction" target="_self">Labs</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/integrate/introduction" target="_self">Integrate</a></li><li class="siteNavGroupActive"><a href="/docs-new/docs/essays/introduction" target="_self">Essays</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Basics</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/overview">Nervos CKB docs overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Basics</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/introduction">Basics introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/devchain">Run a development CKB blockchain</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs-new/docs/basics/mainnet">Run a CKB Mainnet Node</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/testnet">Run a CKB Testnet Node</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/basics/neuron">Neuron Wallet Guide</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Reference</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/introduction">Reference introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/cell">Cell</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/script">Script</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/transaction">Transaction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/reference/rpc">JSON-RPC</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Labs</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/labs/introduction">Labs introduction</a></li><li class="navListItem"><a class="navItem" href="/docs-new/docs/labs/sudtbycapsule">Write a SUDT script by Capsule</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Integrate</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/integrate/introduction">Integrate introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Projects</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/projects/introduction">Projects introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Essays</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/essays/introduction">Essays introduction</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Community</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs-new/docs/community/introduction">Community</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Run a CKB Mainnet Node</h1></header><article><div><span><p><em>Fun Fact: Running a CKB Mainnet node not only helps contribute to the robustness and decentralized nature of the Network, it also means you do not need to rely on any 3rd party to provide data from the blockchain, which increases your security.</em></p>
+<p>Running a node requires using the command line. If you have never used a command line before, you may refer to <a href="https://www.google.com/search?q=learn+command+line">how to use the command line tool</a> on your computer. Although it may seem complicated at first, it is quite simple and you should be able to easily run a CKB node following the specific instructions below.</p>
+<p>Step 1: Download the latest release CKB binary file from <a href="https://github.com/nervosnetwork/ckb/releases">CKB releases page on GitHub</a></p>
+<p>Step 2:  Unzip / extract the downloaded file to an easily accessible folder.
+For Windows we recommend <code>C:\ckb</code>
+On Mac we recommend <code>~/Documents</code></p>
+<p>Step 3: Open up Terminal (Mac) or command line (Windows).</p>
+<ul>
+<li><p>On Mac:</p>
+<ul>
+<li>Either 1) open your Applications folder, then open Utilities and double-click on Terminal, or 2) press <code>Command - Spacebar</code> or <code>Control -Spacebar</code> to launch Spotlight and type &quot;Terminal,&quot; then double-click the search result and the following steps are performed on Terminal.</li>
+</ul></li>
+<li><p>On Windows:</p>
+<ul>
+<li>Please note: if you are familiar with command line operation on Windows, you can skip this step and open the <code>cmd</code> or <code>Power Shell</code> terminal instead.</li>
+<li>Download Git for windows from <a href="https://git-scm.com/downloads">Git-Downloads</a>, double-click to install it and open Git Bash in start menu. The following steps will be performed in Git Bash.</li>
+</ul></li>
+</ul>
+<p>Step 4：Copy and paste the commands below into the Terminal (Mac) / Command Line (Windows):</p>
+<ul>
+<li><p>Please note: the directory and folder name on your computer must match the commands below, if not, please modify the command script correspondingly.</p></li>
+<li><p>Mac</p></li>
+</ul>
+<pre><code class="hljs"><span class="hljs-keyword">cd</span> <span class="hljs-string">/Users/</span><span class="hljs-params">(NAME)</span><span class="hljs-string">/Documents/ckb_v0.32.1_x86_64-apple-darwin</span>
+<span class="hljs-string">./ckb</span> <span class="hljs-params">--version</span>
+<span class="hljs-string">./ckb-cli</span> <span class="hljs-params">--version</span>
+</code></pre>
+<ul>
+<li>Windows</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-keyword">cd</span> C:<span class="hljs-string">/ckb_v0.32.1_x86_64-pc-windows-msvc</span> 
+ckb <span class="hljs-params">--version</span> 
+ckb-cli <span class="hljs-params">--version</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">
+ckb 0.32.1 (9ebc9ce 2020-05-29)
+ckb-cli 0.32.0 (0fc435d 2020-05-22)
+</code></pre>
+<p></details></p>
+<p>Step 5: To run the CKB node, copy and paste the commands below into the Terminal (Mac) / Command Line (Windows):</p>
+<ul>
+<li>Initialize the node (run only once)</li>
+</ul>
+<pre><code class="hljs">ckb init <span class="hljs-comment">--chain mainnet</span>
+</code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">
+WARN: mining feature is disabled because of lacking the block assembler config options
+Initialized CKB directory <span class="hljs-keyword">in</span> /PATH/ckb_v0.32.1_x86_64-apple-darwin
+create ckb.toml
+create ckb-miner.toml
+</code></pre>
+<p></details></p>
+<ul>
+<li>Start the node.</li>
+</ul>
+<pre><code class="hljs">ckb <span class="hljs-keyword">run</span><span class="bash">
+</span></code></pre>
+<p><details>
+<summary>(click here to view response)</summary></p>
+<pre><code class="hljs css language-bash">
+2020-06-05 18:10:19.785 +08:00 main INFO sentry  sentry is disabled
+2020-06-05 18:10:19.869 +08:00 main INFO main  Miner is disabled, edit ckb.toml to <span class="hljs-built_in">enable</span> it
+2020-06-05 18:10:19.942 +08:00 main INFO ckb-memory-tracker  track current process: unsupported
+2020-06-05 18:10:19.942 +08:00 main INFO main  ckb version: 0.32.1 (9ebc9ce 2020-05-29)
+2020-06-05 18:10:19.942 +08:00 main INFO main  chain genesis <span class="hljs-built_in">hash</span>: 0x92b197aa1fba0f63633922c61c92375c9c074a93e85963554f5499fe1450d0e5
+2020-06-05 18:10:19.944 +08:00 NetworkRuntime INFO ckb-network  p2p service event: ListenStarted { address: <span class="hljs-string">"/ip4/0.0.0.0/tcp/8115"</span> }
+2020-06-05 18:10:19.946 +08:00 NetworkRuntime INFO ckb-network  Listen on address: /ip4/0.0.0.0/tcp/8115/p2p/QmWKGXVhYx2T8YmbsC1RYjnrRf1hfz2ZNTMywrkN9y2bVg
+2020-06-05 18:10:19.951 +08:00 main INFO ckb-db  Initialize a new database
+2020-06-05 18:10:19.983 +08:00 main INFO ckb-db  Init database version 20191201091330
+2020-06-05 18:10:20.146 +08:00 NetworkRuntime INFO ckb-relay  RelayProtocol(1).connected peer=SessionId(1)
+2020-06-05 18:10:20.146 +08:00 NetworkRuntime INFO ckb-sync  SyncProtocol.connected peer=SessionId(1)
+2020-06-05 18:10:20.451 +08:00 NetworkRuntime INFO ckb-sync  Ignoring getheaders from peer=SessionId(1) because node is <span class="hljs-keyword">in</span> initial block download
+2020-06-05 18:10:20.749 +08:00 ChainService INFO ckb-chain  block: 1, <span class="hljs-built_in">hash</span>: 0x2567f226c73b04a6cb3ef04b3bb10ab99f37850794cd9569be7de00bac4db875, epoch: 0(1/1743), total_diff: 0x3b1bb3d4c1376a, txs: 1
+</code></pre>
+<p></details></p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs-new/docs/basics/devchain"><span class="arrow-prev">← </span><span>Run a development CKB blockchain</span></a><a class="docs-next button" href="/docs-new/docs/basics/testnet"><span>Run a CKB Testnet Node</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div></div></body></html>
