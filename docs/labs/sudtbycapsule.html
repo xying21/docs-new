@@ -80,13 +80,14 @@
 <h3><a class="anchor" aria-hidden="true" id="run-a-dev-chain-and-ckb-cli"></a><a href="#run-a-dev-chain-and-ckb-cli" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run a dev chain and ckb-cli</h3>
 <p>You should be able to run a dev chain and know about how to use <code>ckb-cli</code> to send transactions.  If you do not, please refer to this tutorial：<a href="/docs/basics/guides/devchain">How to use a development blockchain</a>.  Please don't forget to add <code>ckb-cli</code> to the  PATH environment variable</p>
 <h3><a class="anchor" aria-hidden="true" id="install-capsule"></a><a href="#install-capsule" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install capsule</h3>
-<p>To use capsule, you need <code>cargo</code> and <code>docker</code>. If you don't have these tools, you may install them from here, it is recommended to install the latest version:</p>
+<p>To use capsule, you need <code>docker</code>. It is recommended to install the latest version:</p>
 <ul>
-<li><a href="https://doc.rust-lang.org/cargo/getting-started/installation.html">Install cargo</a></li>
-<li><a href="https://www.docker.com/">Install docker</a></li>
+<li><a href="https://docs.docker.com/get-docker/">Install docker</a></li>
 </ul>
-<p>Now you can proceed to install capsule with these commands:</p>
-<pre><code class="hljs">cargo install capsule --git http<span class="hljs-variable">s:</span>//github.<span class="hljs-keyword">com</span>/nervosnetwork/capsule.git --<span class="hljs-keyword">tag</span> v0.<span class="hljs-number">0.1</span>-<span class="hljs-keyword">pre</span>.<span class="hljs-number">2</span>
+<p>Note: The current user must have permission to manage Docker instances. (How to manage Docker as a non-root user)[<a href="https://docs.docker.com/engine/install/linux-postinstall/">https://docs.docker.com/engine/install/linux-postinstall/</a>].</p>
+<p>Now you can proceed to install capsule, It is recommended to <a href="https://github.com/nervosnetwork/capsule/releases/tag/v0.1.1">download the binary</a></p>
+<p>Or you can install from source:</p>
+<pre><code class="hljs">cargo install capsule --git https://github.com/nervosnetwork/capsule.git --<span class="hljs-keyword">tag</span> <span class="hljs-title">v0</span>.<span class="hljs-number">1.1</span>
 </code></pre>
 <p>Then check if it works with:</p>
 <pre><code class="hljs">capsule<span class="hljs-built_in"> check
@@ -135,22 +136,79 @@ build  capsule.toml  Cargo.toml  contracts  deployment.toml  migrations  README.
 Cargo.toml  src
 </code></pre>
 <p></details></p>
-<p>You can open <code>my-sudt/contracts/my-sudt/src/main.rs</code> to see some pre-written code:</p>
-<pre><code class="hljs"><span class="hljs-meta">#![no_std]</span>
+<p>You can open <code>my-sudt/contracts/my-sudt/src/main.rs</code> to see some pre-generated code:</p>
+<pre><code class="hljs css language-rust"><span class="hljs-meta">#![no_std]</span>
 <span class="hljs-meta">#![no_main]</span>
 <span class="hljs-meta">#![feature(lang_items)]</span>
 <span class="hljs-meta">#![feature(alloc_error_handler)]</span>
 <span class="hljs-meta">#![feature(panic_info_message)]</span>
 
-use ckb_std::{entry, default_alloc};
+<span class="hljs-comment">// Import from `core` instead of from `std` since we are in no-std mode</span>
+<span class="hljs-keyword">use</span> core::result::<span class="hljs-built_in">Result</span>;
 
-entry!(main);
+<span class="hljs-comment">// Import heap related library from `alloc`</span>
+<span class="hljs-comment">// https://doc.rust-lang.org/alloc/index.html</span>
+<span class="hljs-keyword">use</span> alloc::{vec, vec::<span class="hljs-built_in">Vec</span>};
+
+<span class="hljs-comment">// Import CKB syscalls and structures</span>
+<span class="hljs-comment">// https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/index.html</span>
+<span class="hljs-keyword">use</span> ckb_std::{
+    entry,
+    default_alloc,
+    debug,
+    high_level::{load_script, load_tx_hash},
+    error::SysError,
+    ckb_types::{bytes::Bytes, prelude::*},
+};
+
+entry!(entry);
 default_alloc!();
 
-#[no_mangle]
-fn main() -&gt; i8 {
-    <span class="hljs-comment">// this contract always return true</span>
-    <span class="hljs-number">0</span>
+<span class="hljs-comment">/// Program entry</span>
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">entry</span></span>() -&gt; <span class="hljs-built_in">i8</span> {
+    <span class="hljs-comment">// Call main function and return error code</span>
+    <span class="hljs-keyword">match</span> main() {
+        <span class="hljs-literal">Ok</span>(_) =&gt; <span class="hljs-number">0</span>,
+        <span class="hljs-literal">Err</span>(err) =&gt; err <span class="hljs-keyword">as</span> <span class="hljs-built_in">i8</span>,
+    }
+}
+
+<span class="hljs-comment">/// Error</span>
+<span class="hljs-meta">#[repr(i8)]</span>
+<span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Error</span></span> {
+    IndexOutOfBound = <span class="hljs-number">1</span>,
+    ItemMissing,
+    LengthNotEnough,
+    Encoding,
+    <span class="hljs-comment">// Add customized errors here...</span>
+}
+
+<span class="hljs-keyword">impl</span> <span class="hljs-built_in">From</span>&lt;SysError&gt; <span class="hljs-keyword">for</span> Error {
+    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">from</span></span>(err: SysError) -&gt; <span class="hljs-keyword">Self</span> {
+        <span class="hljs-keyword">use</span> SysError::*;
+        <span class="hljs-keyword">match</span> err {
+            IndexOutOfBound =&gt; Self::IndexOutOfBound,
+            ItemMissing =&gt; Self::ItemMissing,
+            LengthNotEnough(_) =&gt; Self::LengthNotEnough,
+            Encoding =&gt; Self::Encoding,
+            Unknown(err_code) =&gt; <span class="hljs-built_in">panic!</span>(<span class="hljs-string">"unexpected sys error {}"</span>, err_code),
+        }
+    }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;(), Error&gt; {
+    <span class="hljs-comment">// remove below examples and write your code here</span>
+
+    <span class="hljs-keyword">let</span> script = load_script()?;
+    <span class="hljs-keyword">let</span> args: Bytes = script.args().unpack();
+    debug!(<span class="hljs-string">"script args is {:?}"</span>, args);
+
+    <span class="hljs-keyword">let</span> tx_hash = load_tx_hash()?;
+    debug!(<span class="hljs-string">"tx hash is {:?}"</span>, tx_hash);
+
+    <span class="hljs-keyword">let</span> _buf: <span class="hljs-built_in">Vec</span>&lt;_&gt; = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">0u8</span>; <span class="hljs-number">32</span>];
+
+    <span class="hljs-literal">Ok</span>(())
 }
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" id="build-the-project"></a><a href="#build-the-project" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Build the project</h3>
@@ -163,13 +221,15 @@ fn main() -&gt; i8 {
 <pre><code class="hljs css language-bash">
 Building contract my-sudt
     Updating crates.io index
- Downloading crates ...
-  Downloaded buddy-alloc v0.2.0
-  Downloaded ckb-std v0.1.6
-   Compiling buddy-alloc v0.2.0
-   Compiling ckb-std v0.1.6
-   Compiling my-sudt v0.1.0 (/code)
-    Finished release [optimized] target(s) <span class="hljs-keyword">in</span> 9.86s
+   Compiling cc v1.0.56
+   Compiling cfg-if v0.1.10
+   Compiling buddy-alloc v0.3.0
+   Compiling molecule v0.6.0
+   Compiling ckb-allocator v0.1.1
+   Compiling ckb-standalone-types v0.0.1-pre.1
+   Compiling ckb-std v0.4.1
+   Compiling my-sudt v0.1.0 (/code/contracts/my-sudt)
+    Finished dev [unoptimized + debuginfo] target(s) <span class="hljs-keyword">in</span> 8.73s
 Done
 </code></pre>
 <p></details></p>
@@ -191,91 +251,67 @@ my-sudt
 </ul>
 <p>The script is consisted of four parts：load script、check inputs、load inputs / outputs UDT amount、error handling. We should check the used libraries before coding.</p>
 <h3><a class="anchor" aria-hidden="true" id="check-the-used-libraries"></a><a href="#check-the-used-libraries" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Check the used libraries</h3>
-<p>Open <code>contracts/my-sudt/Cargo.toml</code>, you will find two dependencies:</p>
+<p>Open <code>contracts/my-sudt/Cargo.toml</code>, we already have a dependency:</p>
 <pre><code class="hljs"><span class="hljs-section">[dependencies]</span>
-<span class="hljs-attr">ckb-std</span> = <span class="hljs-string">"0.2.1"</span>
-<span class="hljs-attr">ckb-types</span> = { package = <span class="hljs-string">"ckb-standalone-types"</span>, version = <span class="hljs-string">"0.0.1-pre.1"</span>, default-features = <span class="hljs-literal">false</span> }
+<span class="hljs-attr">ckb-std</span> = <span class="hljs-string">"0.4.1"</span>
 </code></pre>
 <ul>
 <li><code>ckb-std</code> is a crate used to handling CKB syscalls.</li>
-<li><code>ckb-standalone-types</code> is a crate that provides the definition of CKB structures.</li>
+<li><code>ckb-standalone-types</code> is a crate which re-exported as the <code>ckb_std::ckb_types</code> provides the definition of CKB structures.</li>
 </ul>
-<p>You may refer to <a href="https://github.com/nervosnetwork/capsule/wiki/Rust-libraries">Rust libraries</a> for more details. We can only use crates which supports <code>no-std</code> in scripts.</p>
+<p>You may refer to <a href="https://github.com/nervosnetwork/capsule/wiki/Rust-libraries">Rust libraries</a> for more useful crates. We can only use crates which supports <code>no-std</code> in scripts.</p>
 <h3><a class="anchor" aria-hidden="true" id="load-script"></a><a href="#load-script" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Load Script</h3>
-<p>At the beginning of the script, we need to load the current script(SUDT) and unpack the args field, also we should check the SUDT’s mode, if it is owner mode, we simply skip the verification code and return <code>0</code>, then the verification is successful.We also need to load the current script(SUDT) and unpack the args field.</p>
-<p>Please note that we can't directly use the <code>std</code> crate since we are using <code>no-std</code> Rust.Instead, we import the <code>Vec</code> struct from the <a href="https://doc.rust-lang.org/stable/alloc/index.html">alloc</a> crate, which is a rust built-in crate contains heap related structs.</p>
-<p>The <code>buf</code> should be large enough to cover the <code>Script</code> data so we use <code>1024</code> bytes buffer.</p>
-<pre><code class="hljs"><span class="hljs-keyword">use</span> alloc::vec::<span class="hljs-built_in">Vec</span>;
-<span class="hljs-keyword">use</span> ckb_std::{
-    ckb_constants::{CellField, Source, SysError},
-    default_alloc, entry, syscalls,
-};
-<span class="hljs-keyword">use</span> ckb_types::{packed::Script, prelude::*};
-
-<span class="hljs-keyword">const</span> BUF_LEN: <span class="hljs-built_in">usize</span> = <span class="hljs-number">1024</span>
-
-<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() -&gt; <span class="hljs-built_in">i8</span> {
+<p>At the beginning of the script, we need to check the SUDT’s mode, if it is owner mode, we simply skip the verification code and return <code>0</code>, which represents the verification is successful, otherwise we check the amount of UDT.</p>
+<p>To achieve this, we need to load <code>args</code> of the current script, which the generated code already did for us. So we just remove the unused lines from the <code>main</code> function.</p>
+<p>In the code below, we load the current script(SUDT)'s args field, and invoke <code>check_owner_mode</code> which we have not defined yet.</p>
+<p>Notice since we are using no-std Rust, we can't directly use the <code>std</code> in the code. Instead, we need to import the <code>Vec</code> struct from the <a href="https://doc.rust-lang.org/stable/alloc/index.html">alloc</a> crate, which is a rust builtin crate contains heap related structs.</p>
+<pre><code class="hljs css language-rust"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;(), Error&gt; {
     <span class="hljs-comment">// load current script</span>
-    <span class="hljs-comment">// check the script is in owner mode or normal mode</span>
-    <span class="hljs-keyword">let</span> script = {
-        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> buf = [<span class="hljs-number">0u8</span>; BUF_LEN];
-        <span class="hljs-keyword">let</span> len = syscalls::load_script(&amp;<span class="hljs-keyword">mut</span> buf, <span class="hljs-number">0</span>).unwrap();
-        Script::new_unchecked(buf[..len].to_vec().into())
-    };
+    <span class="hljs-comment">// check verification branch is owner mode or normal mode</span>
+    <span class="hljs-keyword">let</span> script = load_script()?;
+    <span class="hljs-keyword">let</span> args: Bytes = script.args().unpack();
 
     <span class="hljs-comment">// unpack the Script#args field</span>
     <span class="hljs-keyword">let</span> args: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt; = script.args().unpack();
 
     <span class="hljs-comment">// return success if owner mode is true</span>
-    <span class="hljs-keyword">if</span> check_owner_mode(&amp;args).unwrap() {
-        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> check_owner_mode(&amp;args)? {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">Ok</span>(());
     }
 
     <span class="hljs-comment">// more verifications ...</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">Ok</span>(());
 }
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" id="check-inputs"></a><a href="#check-inputs" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Check inputs</h3>
 <p>Now we should  check the owner mode status by defining the <code>check_owner_mode</code> function：</p>
-<ul>
-<li><p>Load every input's lock hash and compare it with the script's args.</p>
-<ul>
-<li>If  there is  an input's lock hash matching the script's argument, the SUDT script is in owner mode;</li>
-<li>Otherwise，iterate all the inputs and finally got an <code>IndexOutOfBound</code> error which means the SUDT script is in normal mode.</li>
-</ul></li>
-<li><p><code>Source::Input</code> and <code>i</code> means load <code>input</code> from <code>i-th</code> inputs.</p></li>
-<li><p><code>CellField::LockHash</code> means load the <code>LockHash</code> field to the <code>buf</code>.</p></li>
-<li><p>Check the <code>len</code> returned by syscall,  It's always a good practice to check the loaded length.</p></li>
-</ul>
-<pre><code class="hljs"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">check_owner_mode</span></span>(args: &amp;[<span class="hljs-built_in">u8</span>]) -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">bool</span>, SysError&gt; {
+<p>We need to load every input's lock hash and compare it to the script's args. If we find an input's lock hash corresponds to the script's args, we are in owner mode; otherwise, we iterate all the inputs and finally got an <code>IndexOutOfBound</code> error, which means we are in normal mode.</p>
+<p>We use <a href="https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/high_level/fn.load_cell_lock_hash.html">load_cell_lock_hash</a> to load cell's lock hash from CKB. The <code>Source::Input</code> and <code>i</code> args denote we load <code>input</code> from <code>i-th</code> inputs.</p>
+<p>The error <code>SysError::IndexOutOfBound</code> represents that we request an index that does not exist, which means we cannot find a matched input cell, so we return <code>Ok(false)</code>.</p>
+<pre><code class="hljs css language-rust"><span class="hljs-keyword">use</span> ckb_std::{
+    high_level::{load_cell_lock_hash},
+    ckb_constants::Source,
+};
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">check_owner_mode</span></span>(args: &amp;Bytes) -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">bool</span>, Error&gt; {
     <span class="hljs-comment">// With owner lock script extracted, we will look through each input in the</span>
     <span class="hljs-comment">// current transaction to see if any unlocked cell uses owner lock.</span>
-    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> i = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> buf = [<span class="hljs-number">0u8</span>; <span class="hljs-number">32</span>];
-    <span class="hljs-keyword">loop</span> {
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>.. {
         <span class="hljs-comment">// check input's lock_hash with script args</span>
-        <span class="hljs-keyword">let</span> len = <span class="hljs-keyword">match</span> syscalls::load_cell_by_field(
-            &amp;<span class="hljs-keyword">mut</span> buf,
-            <span class="hljs-number">0</span>,
+        <span class="hljs-keyword">let</span> lock_hash = <span class="hljs-keyword">match</span> load_cell_lock_hash(
             i,
             Source::Input,
-            CellField::LockHash,
         ) {
-            <span class="hljs-literal">Ok</span>(len) =&gt; len,
+            <span class="hljs-literal">Ok</span>(lock_hash) =&gt; lock_hash,
             <span class="hljs-literal">Err</span>(SysError::IndexOutOfBound) =&gt; <span class="hljs-keyword">return</span> <span class="hljs-literal">Ok</span>(<span class="hljs-literal">false</span>),
-            <span class="hljs-literal">Err</span>(err) =&gt; <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(err)),
+            <span class="hljs-literal">Err</span>(err) =&gt; <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(err.into()),
         };
-
         <span class="hljs-comment">// invalid length of loaded data</span>
-        <span class="hljs-keyword">if</span> len != buf.len() {
-            <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(SysError::Unknown(<span class="hljs-number">4</span>));
+        <span class="hljs-keyword">if</span> args[..] == lock_hash[..] {
+           <span class="hljs-keyword">return</span> <span class="hljs-literal">Ok</span>(<span class="hljs-literal">true</span>);
         }
-
-        <span class="hljs-keyword">if</span> args[..] == buf[..] {
-            <span class="hljs-keyword">return</span> <span class="hljs-literal">Ok</span>(<span class="hljs-literal">true</span>);
-        }
-        i += <span class="hljs-number">1</span>;
     }
+    <span class="hljs-literal">Ok</span>(<span class="hljs-literal">false</span>)
 }
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" id="load-inputs--outputs-udt-amount"></a><a href="#load-inputs--outputs-udt-amount" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Load inputs / outputs UDT amount</h3>
@@ -295,35 +331,33 @@ my-sudt
 <li>The data type of SUDT is  <code>u128</code>, which is 16 bytes so we use the 16 bytes buffer.</li>
 <li><code>i-th</code> input of <code>Source::Input</code>(index of all inputs) may be or may not be the same cell of the <code>i-th</code> input of <code>Source::GroupInput</code> (index of inputs which lock/type is the current script).</li>
 </ul>
-<pre><code class="hljs"><span class="hljs-keyword">const</span> UDT_LEN: <span class="hljs-built_in">usize</span> = <span class="hljs-number">16</span>;
+<pre><code class="hljs css language-rust"><span class="hljs-keyword">const</span> UDT_LEN: <span class="hljs-built_in">usize</span> = <span class="hljs-number">16</span>;
 
-<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">collect_inputs_amount</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">u128</span>, SysError&gt; {
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">collect_inputs_amount</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">u128</span>, Error&gt; {
     <span class="hljs-comment">// let's loop through all input cells containing current UDTs,</span>
     <span class="hljs-comment">// and gather the sum of all input tokens.</span>
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> inputs_amount: <span class="hljs-built_in">u128</span> = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> i = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> buf = [<span class="hljs-number">0u8</span>; UDT_LEN];
 
     <span class="hljs-comment">// u128 is 16 bytes</span>
-    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> buf = [<span class="hljs-number">0u8</span>; UDT_LEN];
-    <span class="hljs-keyword">loop</span> {
-        <span class="hljs-comment">// check input's lock_hash with script args</span>
-        <span class="hljs-keyword">let</span> len = <span class="hljs-keyword">match</span> syscalls::load_cell_data(&amp;<span class="hljs-keyword">mut</span> buf, <span class="hljs-number">0</span>, i, Source::GroupInput) {
-            <span class="hljs-literal">Ok</span>(len) =&gt; len,
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>.. {
+        <span class="hljs-keyword">let</span> data = <span class="hljs-keyword">match</span> load_cell_data(i, Source::GroupInput) {
+            <span class="hljs-literal">Ok</span>(data) =&gt; data,
             <span class="hljs-literal">Err</span>(SysError::IndexOutOfBound) =&gt; <span class="hljs-keyword">break</span>,
             <span class="hljs-literal">Err</span>(err) =&gt; <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(err.into()),
         };
 
-        <span class="hljs-keyword">if</span> len != UDT_LEN {
-            <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(SysError::Unknown(<span class="hljs-number">4</span>));
+        <span class="hljs-keyword">if</span> data.len() != UDT_LEN {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(Error::Encoding);
         }
+        buf.copy_from_slice(&amp;data);
         inputs_amount += <span class="hljs-built_in">u128</span>::from_le_bytes(buf);
-        i += <span class="hljs-number">1</span>;
     }
     <span class="hljs-literal">Ok</span>(inputs_amount)
 }
 </code></pre>
-<p>The <code>collect_outputs_amount</code> function is the same implementation except load data from outputs:</p>
-<pre><code class="hljs"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">collect_outputs_amount</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">u128</span>, SysError&gt; {
+<p>The <code>collect_outputs_amount</code> function is similar, except we load data from outputs:</p>
+<pre><code class="hljs css language-rust"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">collect_outputs_amount</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">u128</span>, Error&gt; {
     <span class="hljs-comment">// With the sum of all input UDT tokens gathered, let's now iterate through</span>
     <span class="hljs-comment">// output cells to grab the sum of all output UDT tokens.</span>
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> outputs_amount: <span class="hljs-built_in">u128</span> = <span class="hljs-number">0</span>;
@@ -331,19 +365,18 @@ my-sudt
 
     <span class="hljs-comment">// u128 is 16 bytes</span>
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> buf = [<span class="hljs-number">0u8</span>; UDT_LEN];
-    <span class="hljs-keyword">loop</span> {
-        <span class="hljs-comment">// check input's lock_hash with script args</span>
-        <span class="hljs-keyword">let</span> len = <span class="hljs-keyword">match</span> syscalls::load_cell_data(&amp;<span class="hljs-keyword">mut</span> buf, <span class="hljs-number">0</span>, i, Source::GroupOutput) {
-            <span class="hljs-literal">Ok</span>(len) =&gt; len,
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>.. {
+        <span class="hljs-keyword">let</span> data = <span class="hljs-keyword">match</span> load_cell_data(i, Source::GroupOutput) {
+            <span class="hljs-literal">Ok</span>(data) =&gt; data,
             <span class="hljs-literal">Err</span>(SysError::IndexOutOfBound) =&gt; <span class="hljs-keyword">break</span>,
-            <span class="hljs-literal">Err</span>(err) =&gt; <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(err),
+            <span class="hljs-literal">Err</span>(err) =&gt; <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(err.into()),
         };
 
-        <span class="hljs-keyword">if</span> len != UDT_LEN {
-            <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(SysError::Unknown(<span class="hljs-number">4</span>));
+        <span class="hljs-keyword">if</span> data.len() != UDT_LEN {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">Err</span>(Error::Encoding);
         }
+        buf.copy_from_slice(&amp;data);
         outputs_amount += <span class="hljs-built_in">u128</span>::from_le_bytes(buf);
-        i += <span class="hljs-number">1</span>;
     }
     <span class="hljs-literal">Ok</span>(outputs_amount)
 }
@@ -351,60 +384,19 @@ my-sudt
 <ul>
 <li>Update the <code>main</code> function to check inputs / outputs UDT amount:</li>
 </ul>
-<pre><code class="hljs"><span class="hljs-built_in">let</span> inputs_amount = collect_inputs_amount()?;
-    <span class="hljs-built_in">let</span> outputs_amount = collect_outputs_amount()?;
-
-    // <span class="hljs-built_in">return</span> <span class="hljs-built_in">error</span> <span class="hljs-keyword">if</span> inputs amount &lt; outputs amount
-    <span class="hljs-keyword">if</span> inputs_amount &lt; outputs_amount {
-        // <span class="hljs-built_in">return</span> <span class="hljs-built_in">error</span> code
-        <span class="hljs-built_in">return</span> <span class="hljs-number">5</span>;
-    }
-
-    <span class="hljs-built_in">return</span> <span class="hljs-number">0</span>;
-</code></pre>
-<h3><a class="anchor" aria-hidden="true" id="error-handling"></a><a href="#error-handling" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Error handling</h3>
-<p>In the previous codes, we reuse <code>SysError</code> to indicate errors for convenience. It is recommended to define our own errors and assign reasonable error codes.</p>
-<ul>
-<li><p>Add <code>#[repr(i8)]</code> on our error, and start error code from <code>1</code>. CKB verification engine allows the  <code>i8</code> error code, <code>0</code> represents the verification is successful, non-zero represents the verification is failure.</p></li>
-<li><p>Define <code>From</code> trait on <code>SysError</code></p></li>
-</ul>
-<pre><code class="hljs"><span class="hljs-comment">// Error codes</span>
+<pre><code class="hljs css language-rust"><span class="hljs-comment">/// Error</span>
 <span class="hljs-meta">#[repr(i8)]</span>
 <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Error</span></span> {
     IndexOutOfBound = <span class="hljs-number">1</span>,
     ItemMissing,
     LengthNotEnough,
-    Encoding, <span class="hljs-comment">// data encoding error</span>
-    Amount,   <span class="hljs-comment">// amount error</span>
+    Encoding,
+    Amount
 }
 
-<span class="hljs-keyword">impl</span> <span class="hljs-built_in">From</span>&lt;SysError&gt; <span class="hljs-keyword">for</span> Error {
-    <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">from</span></span>(err: SysError) -&gt; <span class="hljs-keyword">Self</span> {
-        <span class="hljs-keyword">use</span> SysError::*;
-        <span class="hljs-keyword">match</span> err {
-            IndexOutOfBound =&gt; Self::IndexOutOfBound,
-            ItemMissing =&gt; Self::ItemMissing,
-            LengthNotEnough(_) =&gt; Self::LengthNotEnough,
-            Unknown(err_code) =&gt; <span class="hljs-built_in">panic!</span>(<span class="hljs-string">"unexpected sys error {}"</span>, err_code),
-        }
-    }
-}
-</code></pre>
-<ul>
-<li><p>Replace all <code>SysError</code> with <code>Error</code>.</p></li>
-<li><p>Define <code>check</code> function to return results so we can use <code>?</code> operation, and convert errors to error code in the <code>main</code> function:</p></li>
-</ul>
-<pre><code class="hljs"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">check</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;(), Error&gt; {
-    <span class="hljs-comment">// load current script</span>
-    <span class="hljs-comment">// check verification branch is owner mode or normal mode</span>
-    <span class="hljs-keyword">let</span> script = {
-        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> buf = [<span class="hljs-number">0u8</span>; BUF_LEN];
-        <span class="hljs-keyword">let</span> len = syscalls::load_script(&amp;<span class="hljs-keyword">mut</span> buf, <span class="hljs-number">0</span>)?;
-        Script::new_unchecked(buf[..len].to_vec().into())
-    };
-
-    <span class="hljs-comment">// unpack the Script#args field</span>
-    <span class="hljs-keyword">let</span> args: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u8</span>&gt; = script.args().unpack();
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;(), Error&gt; {
+    <span class="hljs-keyword">let</span> script = load_script()?;
+    <span class="hljs-keyword">let</span> args: Bytes = script.args().unpack();
 
     <span class="hljs-comment">// return success if owner mode is true</span>
     <span class="hljs-keyword">if</span> check_owner_mode(&amp;args)? {
@@ -420,14 +412,55 @@ my-sudt
 
     <span class="hljs-literal">Ok</span>(())
 }
-
-<span class="hljs-meta">#[no_mangle]</span>
-<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() -&gt; <span class="hljs-built_in">i8</span> {
-    <span class="hljs-keyword">match</span> check() {
-        <span class="hljs-literal">Ok</span>(_) =&gt; <span class="hljs-number">0</span>,
-        <span class="hljs-literal">Err</span>(err) =&gt; err <span class="hljs-keyword">as</span> <span class="hljs-built_in">i8</span>,
-    }
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="use-iterator-to-query-cells"></a><a href="#use-iterator-to-query-cells" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Use Iterator to query cells</h3>
+<p>In the previous code, we use <code>for</code> loop to iterate inputs and outputs, since iteration over cells is a common pattern in CKB programming, <code>ckb-std</code> provides a high-level interface <a href="https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/high_level/struct.QueryIter.html">QueryIter</a> to handle it.</p>
+<p>QueryIter needs two args, the first is a loading function, the seconds is <code>Source</code>. This is an example to load all grouped inputs cells data <code>QueryIter::new(load_cell_data, Source::GroupInput)</code>.</p>
+<p>Rewrite our functions:</p>
+<pre><code class="hljs css language-rust"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">check_owner_mode</span></span>(args: &amp;Bytes) -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">bool</span>, Error&gt; {
+    <span class="hljs-comment">// With owner lock script extracted, we will look through each input in the</span>
+    <span class="hljs-comment">// current transaction to see if any unlocked cell uses owner lock.</span>
+    <span class="hljs-keyword">let</span> is_owner_mode = QueryIter::new(load_cell_lock_hash, Source::Input)
+        .find(|lock_hash| args[..] == lock_hash[..]).is_some();
+    <span class="hljs-literal">Ok</span>(is_owner_mode)
 }
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">collect_inputs_amount</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">u128</span>, Error&gt; {
+    <span class="hljs-comment">// let's loop through all input cells containing current UDTs,</span>
+    <span class="hljs-comment">// and gather the sum of all input tokens.</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> buf = [<span class="hljs-number">0u8</span>; UDT_LEN];
+
+    <span class="hljs-keyword">let</span> udt_list = QueryIter::new(load_cell_data, Source::GroupInput)
+        .map(|data|{
+            <span class="hljs-keyword">if</span> data.len() == UDT_LEN {
+                buf.copy_from_slice(&amp;data);
+                <span class="hljs-comment">// u128 is 16 bytes</span>
+                <span class="hljs-literal">Ok</span>(<span class="hljs-built_in">u128</span>::from_le_bytes(buf))
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-literal">Err</span>(Error::Encoding)
+            }
+        }).collect::&lt;<span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">Vec</span>&lt;_&gt;, Error&gt;&gt;()?;
+    <span class="hljs-literal">Ok</span>(udt_list.into_iter().sum::&lt;<span class="hljs-built_in">u128</span>&gt;())
+}
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">collect_outputs_amount</span></span>() -&gt; <span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">u128</span>, Error&gt; {
+    <span class="hljs-comment">// With the sum of all input UDT tokens gathered, let's now iterate through</span>
+    <span class="hljs-comment">// output cells to grab the sum of all output UDT tokens.</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> buf = [<span class="hljs-number">0u8</span>; UDT_LEN];
+
+    <span class="hljs-keyword">let</span> udt_list = QueryIter::new(load_cell_data, Source::GroupOutput)
+        .map(|data|{
+            <span class="hljs-keyword">if</span> data.len() == UDT_LEN {
+                buf.copy_from_slice(&amp;data);
+                <span class="hljs-comment">// u128 is 16 bytes</span>
+                <span class="hljs-literal">Ok</span>(<span class="hljs-built_in">u128</span>::from_le_bytes(buf))
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-literal">Err</span>(Error::Encoding)
+            }
+        }).collect::&lt;<span class="hljs-built_in">Result</span>&lt;<span class="hljs-built_in">Vec</span>&lt;_&gt;, Error&gt;&gt;()?;
+    <span class="hljs-literal">Ok</span>(udt_list.into_iter().sum::&lt;<span class="hljs-built_in">u128</span>&gt;())
+}
+
 </code></pre>
 <p>Now we have finished the SUDT script, you may refer to <a href="https://github.com/jjyr/my-sudt/blob/master/contracts/my-sudt/src/main.rs">Full code of my-sudt</a> to check the full script code. If you are interested, you may also check <a href="https://github.com/nervosnetwork/ckb-miscellaneous-scripts/blob/master/c/simple_udt.c">the SUDT script written in C</a>.</p>
 <h3><a class="anchor" aria-hidden="true" id="build-the-project-1"></a><a href="#build-the-project-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Build the project</h3>
@@ -453,56 +486,56 @@ failures:
 <ul>
 <li>In the beginning part, initialize the  <code>Context</code> which is a structure to simulate the chain environment. We can use <code>Context</code> to deploy exists cells and mock block headers.<code>deploy_contract</code> will return the  <code>out_point</code> of the script.</li>
 </ul>
-<pre><code class="hljs"><span class="hljs-comment">// deploy contract</span>
-    <span class="hljs-keyword">let</span> mut <span class="hljs-keyword">context</span> = Context::<span class="hljs-keyword">default</span>();
-    <span class="hljs-keyword">let</span> contract_bin: Bytes = Loader::<span class="hljs-keyword">default</span>()<span class="hljs-variable">.load_binary</span>(<span class="hljs-string">"my-sudt"</span>);
-    <span class="hljs-keyword">let</span> contract_out_point = <span class="hljs-keyword">context</span><span class="hljs-variable">.deploy_contract</span>(contract_bin);
+<pre><code class="hljs css language-rust"><span class="hljs-comment">// deploy contract</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> context = Context::default();
+    <span class="hljs-keyword">let</span> contract_bin: Bytes = Loader::default().load_binary(<span class="hljs-string">"my-sudt"</span>);
+    <span class="hljs-keyword">let</span> contract_out_point = context.deploy_contract(contract_bin);
 </code></pre>
 <ul>
 <li>Then <code>build_script</code> is called with the script's <code>out_point</code> , this function returns the <code>Script</code> which uses our script as the code. <code>create_cell</code> creates an existing cell in the context, which uses our script as the <code>lock_script</code>.</li>
 </ul>
 <p><em>Please note the default tests assume the script is a lock_script, but in our case, <code>my-sudt</code> is a type_script. We'll fix it later.</em></p>
-<pre><code class="hljs"><span class="hljs-comment">// prepare scripts</span>
-    <span class="hljs-keyword">let</span> lock<span class="hljs-number">_</span>script = context.build<span class="hljs-number">_</span>script(&amp;contract<span class="hljs-number">_</span><span class="hljs-keyword">out</span><span class="hljs-number">_p</span>oint, Default::<span class="hljs-keyword">default</span>()).expect(<span class="hljs-string">"script"</span>);
-    <span class="hljs-keyword">let</span> lock<span class="hljs-number">_</span>script<span class="hljs-number">_</span>dep = CellDep::<span class="hljs-keyword">new</span><span class="hljs-number">_</span>builder().<span class="hljs-keyword">out</span><span class="hljs-number">_p</span>oint(contract<span class="hljs-number">_</span><span class="hljs-keyword">out</span><span class="hljs-number">_p</span>oint).build();
+<pre><code class="hljs css language-rust"><span class="hljs-comment">// prepare scripts</span>
+    <span class="hljs-keyword">let</span> lock_script = context.build_script(&amp;contract_out_point, <span class="hljs-built_in">Default</span>::default()).expect(<span class="hljs-string">"script"</span>);
+    <span class="hljs-keyword">let</span> lock_script_dep = CellDep::new_builder().out_point(contract_out_point).build();
 
     <span class="hljs-comment">// prepare cells</span>
-    <span class="hljs-keyword">let</span> input<span class="hljs-number">_</span><span class="hljs-keyword">out</span><span class="hljs-number">_p</span>oint = context.create<span class="hljs-number">_</span>cell(
-        CellOutput::<span class="hljs-keyword">new</span><span class="hljs-number">_</span>builder()
-            .capacity(<span class="hljs-number">1000u</span><span class="hljs-number">64</span>.pack())
-            .lock(lock<span class="hljs-number">_</span>script.clone())
+    <span class="hljs-keyword">let</span> input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(<span class="hljs-number">1000u64</span>.pack())
+            .lock(lock_script.clone())
             .build(),
-        Bytes::<span class="hljs-keyword">new</span>(),
+        Bytes::new(),
     );
-    <span class="hljs-keyword">let</span> input = CellInput::<span class="hljs-keyword">new</span><span class="hljs-number">_</span>builder()
-        .previous<span class="hljs-number">_</span>output(input<span class="hljs-number">_</span><span class="hljs-keyword">out</span><span class="hljs-number">_p</span>oint)
+    <span class="hljs-keyword">let</span> input = CellInput::new_builder()
+        .previous_output(input_out_point)
         .build();
 </code></pre>
 <ul>
 <li>After that, build two outputs cells and a transaction structure.It is necessary to include  <code>cell_deps</code> field in the transaction which should contain all the referenced scripts, in this case, we can only refer to <code>my-sudt</code>.  <code>complete_tx</code>  also implement <code>cell_deps</code>, while the field is already completed manually, this line is not necessary.</li>
 </ul>
 <p>Please note that the  transaction's <code>outputs_data</code> must have the same length with the <code>outputs</code>, even the data is empty.</p>
-<pre><code class="hljs">let outputs = vec![
-        CellOutput:<span class="hljs-function">:new_builder</span><span class="hljs-params">()</span>
-            <span class="hljs-string">.capacity</span><span class="hljs-params">(500u64.pack()</span>)
-            <span class="hljs-string">.lock</span><span class="hljs-params">(lock_script.clone()</span>)
-            <span class="hljs-string">.build</span><span class="hljs-params">()</span>,
-        CellOutput:<span class="hljs-function">:new_builder</span><span class="hljs-params">()</span>
-            <span class="hljs-string">.capacity</span><span class="hljs-params">(500u64.pack()</span>)
-            <span class="hljs-string">.lock</span><span class="hljs-params">(lock_script)</span>
-            <span class="hljs-string">.build</span><span class="hljs-params">()</span>,
+<pre><code class="hljs css language-rust"><span class="hljs-keyword">let</span> outputs = <span class="hljs-built_in">vec!</span>[
+        CellOutput::new_builder()
+            .capacity(<span class="hljs-number">500u64</span>.pack())
+            .lock(lock_script.clone())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(<span class="hljs-number">500u64</span>.pack())
+            .lock(lock_script)
+            .build(),
     ];
 
-    let outputs_data = vec![Bytes:<span class="hljs-function">:new</span><span class="hljs-params">()</span>; 2];
+    <span class="hljs-keyword">let</span> outputs_data = <span class="hljs-built_in">vec!</span>[Bytes::new(); <span class="hljs-number">2</span>];
 
-    <span class="hljs-string">//</span> build transaction
-    let tx = TransactionBuilder:<span class="hljs-function">:default</span><span class="hljs-params">()</span>
-        <span class="hljs-string">.input</span><span class="hljs-params">(input)</span>
-        <span class="hljs-string">.outputs</span><span class="hljs-params">(outputs)</span>
-        <span class="hljs-string">.outputs_data</span><span class="hljs-params">(outputs_data.pack()</span>)
-        <span class="hljs-string">.cell_dep</span><span class="hljs-params">(lock_script_dep)</span>
-        <span class="hljs-string">.build</span><span class="hljs-params">()</span>;
-    let tx = context.complete_tx<span class="hljs-params">(tx)</span>;
+    <span class="hljs-comment">// build transaction</span>
+    <span class="hljs-keyword">let</span> tx = TransactionBuilder::default()
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .cell_dep(lock_script_dep)
+        .build();
+    <span class="hljs-keyword">let</span> tx = context.complete_tx(tx);
 </code></pre>
 <ul>
 <li>Finally, verify the transaction:</li>
@@ -515,7 +548,7 @@ failures:
 <h3><a class="anchor" aria-hidden="true" id="write-new-tests"></a><a href="#write-new-tests" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Write new tests</h3>
 <p>We should create mock SUDT cells and spend them for testing SUDT verification.
 As <code>my-sudt</code> script is a <code>type_script</code> we need another script as <code>lock_script</code> for mock cells, it is recommended to use <code>always success</code> script returned <code>0</code>. <code>always success</code> is built-in in the <code>ckb-testtool</code>.</p>
-<pre><code class="hljs"><span class="hljs-keyword">use</span> ckb_testtool::{builtin::ALWAYS_SUCCESS, context::Context};
+<pre><code class="hljs css language-rust"><span class="hljs-keyword">use</span> ckb_testtool::{builtin::ALWAYS_SUCCESS, context::Context};
 
     <span class="hljs-comment">// deploy always_success script</span>
     <span class="hljs-keyword">let</span> always_success_out_point = context.deploy_contract(ALWAYS_SUCCESS.clone());
@@ -536,7 +569,7 @@ As <code>my-sudt</code> script is a <code>type_script</code> we need another scr
 <li><p>Deploy the SUDT and <code>always-success</code> scripts.</p></li>
 </ul>
 <p>Please note that if <code>is_owner_mode</code> is true, we will set <code>lock_script</code>'s <code>lock_hash</code> as <code>owner script hash</code>; otherwise, we will set <code>[0u8; 32]</code> which implies can't enter into owner mode.</p>
-<pre><code class="hljs"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">build_test_context</span></span>(
+<pre><code class="hljs css language-rust"><span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">build_test_context</span></span>(
     inputs_token: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u128</span>&gt;,
     outputs_token: <span class="hljs-built_in">Vec</span>&lt;<span class="hljs-built_in">u128</span>&gt;,
     is_owner_mode: <span class="hljs-built_in">bool</span>,
@@ -577,39 +610,39 @@ As <code>my-sudt</code> script is a <code>type_script</code> we need another scr
 <ul>
 <li>Build inputs and outputs according to the <code>inputs_token</code> and <code>outputs_token</code></li>
 </ul>
-<pre><code class="hljs"><span class="hljs-string">//</span> <span class="hljs-string">...</span>
-    <span class="hljs-string">//</span> prepare inputs
-    <span class="hljs-string">//</span> assign 1000 Bytes to per input
-    let input_ckb = Capacity:<span class="hljs-function">:bytes</span><span class="hljs-params">(1000)</span><span class="hljs-string">.unwrap</span><span class="hljs-params">()</span><span class="hljs-string">.as_u64</span><span class="hljs-params">()</span>;
-    let inputs = inputs_token.iter<span class="hljs-params">()</span><span class="hljs-string">.map</span><span class="hljs-params">(|token| {
-        let <span class="hljs-attr">input_out_point</span> = context.create_cell(
-            CellOutput::new_builder()</span>
-                <span class="hljs-string">.capacity</span><span class="hljs-params">(input_ckb.pack()</span>)
-                <span class="hljs-string">.lock</span><span class="hljs-params">(lock_script.clone()</span>)
-                <span class="hljs-string">.type_</span><span class="hljs-params">(Some(sudt_script.clone()</span>)<span class="hljs-string">.pack</span><span class="hljs-params">()</span>)
-                <span class="hljs-string">.build</span><span class="hljs-params">()</span>,
-            token.to_le_bytes<span class="hljs-params">()</span><span class="hljs-string">.to_vec</span><span class="hljs-params">()</span><span class="hljs-string">.into</span><span class="hljs-params">()</span>,
+<pre><code class="hljs css language-rust"><span class="hljs-comment">// ...</span>
+    <span class="hljs-comment">// prepare inputs</span>
+    <span class="hljs-comment">// assign 1000 Bytes to per input</span>
+    <span class="hljs-keyword">let</span> input_ckb = Capacity::bytes(<span class="hljs-number">1000</span>).unwrap().as_u64();
+    <span class="hljs-keyword">let</span> inputs = inputs_token.iter().map(|token| {
+        <span class="hljs-keyword">let</span> input_out_point = context.create_cell(
+            CellOutput::new_builder()
+                .capacity(input_ckb.pack())
+                .lock(lock_script.clone())
+                .type_(<span class="hljs-literal">Some</span>(sudt_script.clone()).pack())
+                .build(),
+            token.to_le_bytes().to_vec().into(),
         );
-        let input = CellInput:<span class="hljs-function">:new_builder</span><span class="hljs-params">()</span>
-            <span class="hljs-string">.previous_output</span><span class="hljs-params">(input_out_point)</span>
-            <span class="hljs-string">.build</span><span class="hljs-params">()</span>;
+        <span class="hljs-keyword">let</span> input = CellInput::new_builder()
+            .previous_output(input_out_point)
+            .build();
         input
     });
 
-    <span class="hljs-string">//</span> prepare outputs
-    let output_ckb = input_ckb * inputs_token.len<span class="hljs-params">()</span> as u64 / outputs_token.len<span class="hljs-params">()</span> as u64;
-    let outputs = outputs_token.iter<span class="hljs-params">()</span><span class="hljs-string">.map</span><span class="hljs-params">(|_token| {
-        CellOutput::new_builder()</span>
-            <span class="hljs-string">.capacity</span><span class="hljs-params">(output_ckb.pack()</span>)
-            <span class="hljs-string">.lock</span><span class="hljs-params">(lock_script.clone()</span>)
-            <span class="hljs-string">.type_</span><span class="hljs-params">(Some(sudt_script.clone()</span>)<span class="hljs-string">.pack</span><span class="hljs-params">()</span>)
-            <span class="hljs-string">.build</span><span class="hljs-params">()</span>
+    <span class="hljs-comment">// prepare outputs</span>
+    <span class="hljs-keyword">let</span> output_ckb = input_ckb * inputs_token.len() <span class="hljs-keyword">as</span> <span class="hljs-built_in">u64</span> / outputs_token.len() <span class="hljs-keyword">as</span> <span class="hljs-built_in">u64</span>;
+    <span class="hljs-keyword">let</span> outputs = outputs_token.iter().map(|_token| {
+        CellOutput::new_builder()
+            .capacity(output_ckb.pack())
+            .lock(lock_script.clone())
+            .type_(<span class="hljs-literal">Some</span>(sudt_script.clone()).pack())
+            .build()
     });
-    let outputs_data: Vec&lt;_&gt; = outputs_token
-        <span class="hljs-string">.iter</span><span class="hljs-params">()</span>
-        <span class="hljs-string">.map</span><span class="hljs-params">(|token| Bytes::from(token.to_le_bytes()</span><span class="hljs-string">.to_vec</span><span class="hljs-params">()</span>))
-        <span class="hljs-string">.collect</span><span class="hljs-params">()</span>;
-    <span class="hljs-string">//</span> <span class="hljs-string">...</span>
+    <span class="hljs-keyword">let</span> outputs_data: <span class="hljs-built_in">Vec</span>&lt;_&gt; = outputs_token
+        .iter()
+        .map(|token| Bytes::from(token.to_le_bytes().to_vec()))
+        .collect();
+    <span class="hljs-comment">// ...</span>
 </code></pre>
 <ul>
 <li>Finally construct the transaction and return it with context.</li>
@@ -625,46 +658,46 @@ As <code>my-sudt</code> script is a <code>type_script</code> we need another scr
     (context, tx)
 </code></pre>
 <p>Now the helper function <code>build_test_context</code> is finished, we can write our tests:</p>
-<pre><code class="hljs">#<span class="hljs-literal">[<span class="hljs-identifier">test</span>]</span>
-fn test<span class="hljs-constructor">_basic()</span> {
-    <span class="hljs-keyword">let</span> (mut context, tx) = build<span class="hljs-constructor">_test_context(<span class="hljs-params">vec</span>![1000], <span class="hljs-params">vec</span>![400, 600], <span class="hljs-params">false</span>)</span>;
-    <span class="hljs-keyword">let</span> tx = context.complete<span class="hljs-constructor">_tx(<span class="hljs-params">tx</span>)</span>;
+<pre><code class="hljs css language-rust"><span class="hljs-meta">#[test]</span>
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">test_basic</span></span>() {
+    <span class="hljs-keyword">let</span> (<span class="hljs-keyword">mut</span> context, tx) = build_test_context(<span class="hljs-built_in">vec!</span>[<span class="hljs-number">1000</span>], <span class="hljs-built_in">vec!</span>[<span class="hljs-number">400</span>, <span class="hljs-number">600</span>], <span class="hljs-literal">false</span>);
+    <span class="hljs-keyword">let</span> tx = context.complete_tx(tx);
 
     <span class="hljs-comment">// run</span>
     context
-        .verify<span class="hljs-constructor">_tx(&amp;<span class="hljs-params">tx</span>, MAX_CYCLES)</span>
+        .verify_tx(&amp;tx, MAX_CYCLES)
         .expect(<span class="hljs-string">"pass verification"</span>);
 }
 
-#<span class="hljs-literal">[<span class="hljs-identifier">test</span>]</span>
-fn test<span class="hljs-constructor">_destroy_udt()</span> {
-    <span class="hljs-keyword">let</span> (mut context, tx) = build<span class="hljs-constructor">_test_context(<span class="hljs-params">vec</span>![1000], <span class="hljs-params">vec</span>![800, 100, 50], <span class="hljs-params">false</span>)</span>;
-    <span class="hljs-keyword">let</span> tx = context.complete<span class="hljs-constructor">_tx(<span class="hljs-params">tx</span>)</span>;
+<span class="hljs-meta">#[test]</span>
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">test_destroy_udt</span></span>() {
+    <span class="hljs-keyword">let</span> (<span class="hljs-keyword">mut</span> context, tx) = build_test_context(<span class="hljs-built_in">vec!</span>[<span class="hljs-number">1000</span>], <span class="hljs-built_in">vec!</span>[<span class="hljs-number">800</span>, <span class="hljs-number">100</span>, <span class="hljs-number">50</span>], <span class="hljs-literal">false</span>);
+    <span class="hljs-keyword">let</span> tx = context.complete_tx(tx);
 
     <span class="hljs-comment">// run</span>
     context
-        .verify<span class="hljs-constructor">_tx(&amp;<span class="hljs-params">tx</span>, MAX_CYCLES)</span>
+        .verify_tx(&amp;tx, MAX_CYCLES)
         .expect(<span class="hljs-string">"pass verification"</span>);
 }
 
-#<span class="hljs-literal">[<span class="hljs-identifier">test</span>]</span>
-fn test<span class="hljs-constructor">_create_sudt_without_owner_mode()</span> {
-    <span class="hljs-keyword">let</span> (mut context, tx) = build<span class="hljs-constructor">_test_context(<span class="hljs-params">vec</span>![1000], <span class="hljs-params">vec</span>![1200], <span class="hljs-params">false</span>)</span>;
-    <span class="hljs-keyword">let</span> tx = context.complete<span class="hljs-constructor">_tx(<span class="hljs-params">tx</span>)</span>;
+<span class="hljs-meta">#[test]</span>
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">test_create_sudt_without_owner_mode</span></span>() {
+    <span class="hljs-keyword">let</span> (<span class="hljs-keyword">mut</span> context, tx) = build_test_context(<span class="hljs-built_in">vec!</span>[<span class="hljs-number">1000</span>], <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1200</span>], <span class="hljs-literal">false</span>);
+    <span class="hljs-keyword">let</span> tx = context.complete_tx(tx);
 
     <span class="hljs-comment">// run</span>
-    <span class="hljs-keyword">let</span> err = context.verify<span class="hljs-constructor">_tx(&amp;<span class="hljs-params">tx</span>, MAX_CYCLES)</span>.unwrap<span class="hljs-constructor">_err()</span>;
-    assert_error_eq!(err, ScriptError::<span class="hljs-constructor">ValidationFailure(ERROR_AMOUNT)</span>);
+    <span class="hljs-keyword">let</span> err = context.verify_tx(&amp;tx, MAX_CYCLES).unwrap_err();
+    assert_error_eq!(err, ScriptError::ValidationFailure(ERROR_AMOUNT));
 }
 
-#<span class="hljs-literal">[<span class="hljs-identifier">test</span>]</span>
-fn test<span class="hljs-constructor">_create_sudt_with_owner_mode()</span> {
-    <span class="hljs-keyword">let</span> (mut context, tx) = build<span class="hljs-constructor">_test_context(<span class="hljs-params">vec</span>![1000], <span class="hljs-params">vec</span>![1200], <span class="hljs-params">true</span>)</span>;
-    <span class="hljs-keyword">let</span> tx = context.complete<span class="hljs-constructor">_tx(<span class="hljs-params">tx</span>)</span>;
+<span class="hljs-meta">#[test]</span>
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">test_create_sudt_with_owner_mode</span></span>() {
+    <span class="hljs-keyword">let</span> (<span class="hljs-keyword">mut</span> context, tx) = build_test_context(<span class="hljs-built_in">vec!</span>[<span class="hljs-number">1000</span>], <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1200</span>], <span class="hljs-literal">true</span>);
+    <span class="hljs-keyword">let</span> tx = context.complete_tx(tx);
 
     <span class="hljs-comment">// run</span>
     context
-        .verify<span class="hljs-constructor">_tx(&amp;<span class="hljs-params">tx</span>, MAX_CYCLES)</span>
+        .verify_tx(&amp;tx, MAX_CYCLES)
         .expect(<span class="hljs-string">"pass verification"</span>);
 }
 </code></pre>
@@ -775,7 +808,7 @@ You will find  <code>new_occupied_capacity</code> is <code>0</code> because <cod
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="next-steps"></a><a href="#next-steps" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Next Steps</h2>
 <p>This is the end of our journey into writing a SUDT script by Capsule. We have launched the <a href="https://www.nervos.org/grants/">Nervos Grants Program</a> and <a href="https://medium.com/nervosnetwork/introducing-cklabs-the-nervos-incubator-3e5a2c443c7c">CKLabs</a> to empower innovation and development and support the growth of a diverse and thriving ecosystem. We can't wait to see what you build next!</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/labs/introduction"><span class="arrow-prev">← </span><span>Introduction</span></a><a class="docs-next button" href="/docs/labs/lumos-nervosdao"><span class="function-name-prevnext">Introduction to Lumos via NervosDAO</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#introduction">Introduction</a></li><li><a href="#prepare-to-write-the-sudt-script">Prepare to write the SUDT script</a><ul class="toc-headings"><li><a href="#run-a-dev-chain-and-ckb-cli">Run a dev chain and ckb-cli</a></li><li><a href="#install-capsule">Install capsule</a></li><li><a href="#create-a-project">Create a project</a></li><li><a href="#build-the-project">Build the project</a></li></ul></li><li><a href="#write-a-sudt-script">Write a SUDT script</a><ul class="toc-headings"><li><a href="#check-the-used-libraries">Check the used libraries</a></li><li><a href="#load-script">Load Script</a></li><li><a href="#check-inputs">Check inputs</a></li><li><a href="#load-inputs--outputs-udt-amount">Load inputs / outputs UDT amount</a></li><li><a href="#error-handling">Error handling</a></li><li><a href="#build-the-project-1">Build the project</a></li></ul></li><li><a href="#testing">Testing</a><ul class="toc-headings"><li><a href="#check-the-default-tests">Check the default tests</a></li><li><a href="#write-new-tests">Write new tests</a></li></ul></li><li><a href="#deployment">Deployment</a><ul class="toc-headings"><li><a href="#run-a-dev-chain-and-ckb-cli-1">Run a dev chain and ckb-cli</a></li><li><a href="#deploy">Deploy</a></li><li><a href="#migration">Migration</a></li></ul></li><li><a href="#next-steps">Next Steps</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div class="footerSection"><h5>Foundation</h5><a href="https://www.nervos.org/">About Us</a></div><div class="footerSection"><h5>Developer</h5><a href="https://github.com/nervosnetwork">GitHub</a><a href="https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0002-ckb/0002-ckb.md">Whitepaper</a><a href="https://github.com/nervosnetwork/rfcs">RFCs</a></div><div class="footerSection socialLinks"><a href="https://twitter.com/nervosnetwork" class="socialLink"><img src="/img/footer_twitter.png"/>Twitter</a><a href="https://medium.com/nervosnetwork" class="socialLink"><img src="/img/footer_medium.png"/>Blog</a><a href="https://t.me/nervosnetwork" class="socialLink"><img src="/img/footer_telegram.png"/>Telegram</a><a href="https://www.reddit.com/r/NervosNetwork/" class="socialLink"><img src="/img/footer_reddit.png"/>Reddit</a><a href="https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A" class="socialLink"><img src="/img/footer_youtube.png"/>YouTube</a><a href="https://talk.nervos.org/" class="socialLink"><img src="/img/footer_forum.png"/>Forum</a></div></section><section class="copyright"><span>Copyright © 2020  Nervos Foundation. All Rights Reserved.</span></section></footer><div id="oldSiteLink"><div><span>Note we&#x27;ve completely rebuilt Nervos Doc site! </span><span>For the old doc site, please see <a href="https://docs-old.nervos.org">docs-old</a>.</span></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/labs/introduction"><span class="arrow-prev">← </span><span>Introduction</span></a><a class="docs-next button" href="/docs/labs/lumos-nervosdao"><span class="function-name-prevnext">Introduction to Lumos via NervosDAO</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#introduction">Introduction</a></li><li><a href="#prepare-to-write-the-sudt-script">Prepare to write the SUDT script</a><ul class="toc-headings"><li><a href="#run-a-dev-chain-and-ckb-cli">Run a dev chain and ckb-cli</a></li><li><a href="#install-capsule">Install capsule</a></li><li><a href="#create-a-project">Create a project</a></li><li><a href="#build-the-project">Build the project</a></li></ul></li><li><a href="#write-a-sudt-script">Write a SUDT script</a><ul class="toc-headings"><li><a href="#check-the-used-libraries">Check the used libraries</a></li><li><a href="#load-script">Load Script</a></li><li><a href="#check-inputs">Check inputs</a></li><li><a href="#load-inputs--outputs-udt-amount">Load inputs / outputs UDT amount</a></li><li><a href="#use-iterator-to-query-cells">Use Iterator to query cells</a></li><li><a href="#build-the-project-1">Build the project</a></li></ul></li><li><a href="#testing">Testing</a><ul class="toc-headings"><li><a href="#check-the-default-tests">Check the default tests</a></li><li><a href="#write-new-tests">Write new tests</a></li></ul></li><li><a href="#deployment">Deployment</a><ul class="toc-headings"><li><a href="#run-a-dev-chain-and-ckb-cli-1">Run a dev chain and ckb-cli</a></li><li><a href="#deploy">Deploy</a></li><li><a href="#migration">Migration</a></li></ul></li><li><a href="#next-steps">Next Steps</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div class="footerSection"><h5>Foundation</h5><a href="https://www.nervos.org/">About Us</a></div><div class="footerSection"><h5>Developer</h5><a href="https://github.com/nervosnetwork">GitHub</a><a href="https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0002-ckb/0002-ckb.md">Whitepaper</a><a href="https://github.com/nervosnetwork/rfcs">RFCs</a></div><div class="footerSection socialLinks"><a href="https://twitter.com/nervosnetwork" class="socialLink"><img src="/img/footer_twitter.png"/>Twitter</a><a href="https://medium.com/nervosnetwork" class="socialLink"><img src="/img/footer_medium.png"/>Blog</a><a href="https://t.me/nervosnetwork" class="socialLink"><img src="/img/footer_telegram.png"/>Telegram</a><a href="https://www.reddit.com/r/NervosNetwork/" class="socialLink"><img src="/img/footer_reddit.png"/>Reddit</a><a href="https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A" class="socialLink"><img src="/img/footer_youtube.png"/>YouTube</a><a href="https://talk.nervos.org/" class="socialLink"><img src="/img/footer_forum.png"/>Forum</a></div></section><section class="copyright"><span>Copyright © 2020  Nervos Foundation. All Rights Reserved.</span></section></footer><div id="oldSiteLink"><div><span>Note we&#x27;ve completely rebuilt Nervos Doc site! </span><span>For the old doc site, please see <a href="https://docs-old.nervos.org">docs-old</a>.</span></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;
