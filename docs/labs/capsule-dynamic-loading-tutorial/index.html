@@ -60,15 +60,15 @@
               }
             });
         </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Dynamic loading in Capsule</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="introduction"></a><a href="#introduction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Introduction</h2>
-<p>Many contracts have a demand for cryptography primitives. In contracts written in Rust, we can easily integrate a cryptography library by adding it as a dependency. But it is not efficient; first, it increases the binary size of the contract; we need to spend more coins to deploy the contract. Second, each contract may include duplicated libraries; it is a waste for the on-chain space.</p>
+<p>Many contracts have a demand for cryptography primitives. In contracts written in Rust, we can easily integrate a cryptography library by adding it as a dependency. But it is not efficient; first, it increases the binary size of the contract; we need to spend more coins to deploy the contract. Second, each contract may include duplicated libraries; it is a waste of the on-chain space.</p>
 <p>We introduce the dynamic loading mechanism to solve this problem:</p>
 <ul>
 <li>A shared library can be loaded in different programming languages</li>
 <li>Using dynamic loading can significantly reduce the contract binary size.</li>
 <li>Using shared libraries increases the utility of the on-chain space.</li>
 </ul>
-<p>Since the <code>v0.6</code> version, <code>ckb-std</code> introduces the <a href="https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/dynamic_loading/index.html">dynamic loading module</a>, which provides a high-level interface to dynamically loading libraries from on-chain cells.</p>
-<p>In this tutorial, we make an example shared library in C, and try to dynamically load the shared library from a contract written in Rust.</p>
+<p>Starting from the <code>v0.6</code> version, <code>ckb-std</code> introduces the <a href="https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/dynamic_loading/index.html">dynamic loading module</a>, which provides a high-level interface to dynamically loading libraries from on-chain cells.</p>
+<p>In this tutorial, we build an example shared library in C, and try to dynamically load the shared library from a contract written in Rust.</p>
 <p>If you run into an issue on this tutorial you can <a href="https://github.com/nervosnetwork/capsule">create a new issue</a> or contact us on <a href="https://talk.nervos.org/">Nervos talk</a> or <a href="https://discord.gg/n6tx7uC">Discord</a>.</p>
 <h2><a class="anchor" aria-hidden="true" id="setup-the-develop-environment"></a><a href="#setup-the-develop-environment" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Setup the develop environment</h2>
 <h3><a class="anchor" aria-hidden="true" id="install-capsule"></a><a href="#install-capsule" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install capsule</h3>
@@ -116,7 +116,7 @@ Done
 <pre><code class="hljs">cd dynamic-loading-demo
 mkdir shared-<span class="hljs-class"><span class="hljs-keyword">lib</span></span>
 </code></pre>
-<p>We define two functions in our shared library. The <code>visibility</code> attribute tells the compiler to exports the following symbol into the shared library.</p>
+<p>We define two functions in our shared library. The <code>visibility</code> attribute tells the compiler to export the following symbol to the shared library.</p>
 <pre><code class="hljs css language-c"><span class="hljs-comment">// shared-lib/shared-lib.c</span>
 
 <span class="hljs-keyword">typedef</span> <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">size_t</span>;
@@ -244,7 +244,7 @@ shared-lib.so: shared-lib.c
 </code></pre>
 <p>Run <code>capsule build</code> to make sure the contract can be built without errors.</p>
 <h2><a class="anchor" aria-hidden="true" id="testing"></a><a href="#testing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testing</h2>
-<p>We need to deploy the <code>shared-lib.so</code> to a cell and reference to the cell in the testing transaction.
+<p>We need to deploy the <code>shared-lib.so</code> to a cell, then reference the cell in the testing transaction.
 Open <code>tests/src/tests.rs</code>.</p>
 <pre><code class="hljs css language-rust"><span class="hljs-keyword">use</span> std::fs::File;
 <span class="hljs-keyword">use</span> std::io::Read;
