@@ -324,7 +324,67 @@ total: 10000.0 (CKB)
 </code></pre>
 <p></details></p>
 <p>The transfer is successful!</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/basics/concepts/ckb-vm"><span class="arrow-prev">← </span><span>CKB-VM</span></a><a class="docs-next button" href="/docs/basics/guides/mainnet"><span>Run a CKB Mainnet Node</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#setup-a-dummy-worker-blockchain">Setup a Dummy-Worker Blockchain</a><ul class="toc-headings"><li><a href="#1-download-the-latest-ckb-binary">1. Download the Latest CKB Binary</a></li><li><a href="#2-initialize-the-configuration">2. Initialize the Configuration</a></li><li><a href="#3-configure-the-block-assembler">3. Configure the Block Assembler</a></li><li><a href="#4-adjust-the-parameters-to-shorten-the-block-interval-optional">4. Adjust the Parameters to Shorten the Block Interval (Optional)</a></li><li><a href="#5-start-the-ckb-node">5. Start the CKB Node</a></li><li><a href="#6-start-the-ckb-miner">6. Start the CKB Miner</a></li></ul></li><li><a href="#setup-an-eaglesong-worker-blockchain">Setup an Eaglesong-Worker Blockchain</a><ul class="toc-headings"><li><a href="#1-download-the-latest-ckb-binary-1">1. Download the Latest CKB Binary</a></li><li><a href="#3-initialize-the-configuration-with-the-miner-account">3. Initialize the Configuration with the Miner Account</a></li><li><a href="#4-change-the-pow-function-to-eaglesong">4. Change the PoW Function to Eaglesong</a></li><li><a href="#5-start-the-ckb-node-1">5. Start the CKB Node</a></li><li><a href="#6-start-the-ckb-miner-1">6. Start the CKB Miner</a></li></ul></li><li><a href="#transferring-ckbytes-using-ckb-cli">Transferring CKBytes Using <code>ckb-cli</code></a><ul class="toc-headings"><li><a href="#1-enter-the-ckb-cli-interface">1. Enter the <code>ckb-cli</code> Interface</a></li><li><a href="#2-create-a-new-account-1">2. Create a New Account</a></li><li><a href="#4-transfer-10000-ckbytes-to-the-new-account">4. Transfer 10,000 CKBytes to the New Account</a></li><li><a href="#5-check-the-new-accounts-balance">5. Check the New Account's Balance</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div class="footerSection"><h5>Foundation</h5><a href="https://www.nervos.org/">About Us</a></div><div class="footerSection"><h5>Developer</h5><a href="https://github.com/nervosnetwork">GitHub</a><a href="https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0002-ckb/0002-ckb.md">Whitepaper</a><a href="https://github.com/nervosnetwork/rfcs">RFCs</a></div><div class="footerSection socialLinks"><a href="https://twitter.com/nervosnetwork" class="socialLink"><img src="/img/footer_twitter.png"/>Twitter</a><a href="https://medium.com/nervosnetwork" class="socialLink"><img src="/img/footer_medium.png"/>Blog</a><a href="https://t.me/nervosnetwork" class="socialLink"><img src="/img/footer_telegram.png"/>Telegram</a><a href="https://www.reddit.com/r/NervosNetwork/" class="socialLink"><img src="/img/footer_reddit.png"/>Reddit</a><a href="https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A" class="socialLink"><img src="/img/footer_youtube.png"/>YouTube</a><a href="https://talk.nervos.org/" class="socialLink"><img src="/img/footer_forum.png"/>Forum</a></div></section><section class="copyright"><span>Copyright © 2020  Nervos Foundation. All Rights Reserved.</span></section></footer><div id="oldSiteLink"><div><span>Note we&#x27;ve completely rebuilt Nervos Doc site! </span><span>For the old doc site, please see <a href="https://docs-old.nervos.org">docs-old</a>.</span></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+<h2><a class="anchor" aria-hidden="true" id="adding-the-genesis-issued-cells"></a><a href="#adding-the-genesis-issued-cells" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding the Genesis Issued Cells</h2>
+<p>When the development blockchain configuration is generated with <code>ckb init --chain dev</code>, a few Cells are created with large amounts of capacity. These are specified in <code>specs/dev.toml</code> and exist only for your local development blockchain, and they can be useful for testing purposes.</p>
+<table>
+  <tr>
+    <td colspan="2">Genesis Issued Cell #1</td>
+  </tr>
+  <tr>
+    <td>Private Key</td><td>0xd00c06bfd800d27397002dca6fb0993d5ba6399b4238b2f29ee9deb97593d2bc</td>
+  </tr>
+  <tr>
+    <td>Lock Arg</td><td>0xc8328aabcd9b9e8e64fbc566c4385c3bdeb219d7</td>
+  </tr>
+  <tr>
+    <td>Testnet Address</td><td>ckt1qyqvsv5240xeh85wvnau2eky8pwrhh4jr8ts8vyj37</td>
+  </tr>
+  <tr>
+    <td>Capcity</td><td>20,000,000,000 CKBytes</td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td colspan="2">Genesis Issued Cell #2</td>
+  </tr>
+  <tr>
+    <td>Private Key</td><td>0x63d86723e08f0f813a36ce6aa123bb2289d90680ae1e99d4de8cdb334553f24d</td>
+  </tr>
+  <tr>
+    <td>Lock Arg</td><td>0x470dcdc5e44064909650113a274b3b36aecb6dc7</td>
+  </tr>
+  <tr>
+    <td>Testnet Address</td><td>ckt1qyqywrwdchjyqeysjegpzw38fvandtktdhrs0zaxl4</td>
+  </tr>
+  <tr>
+    <td>Capcity</td><td>5,198,735,037 CKBytes</td>
+  </tr>
+</table>
+<h3><a class="anchor" aria-hidden="true" id="1-create-private-key-files"></a><a href="#1-create-private-key-files" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. Create Private Key Files</h3>
+<p>Private keys must be added to a text file before they can be used.</p>
+<pre><code class="hljs">echo <span class="hljs-number">0xd00c06bfd800d27397002dca6fb0993d5ba6399b4238b2f29ee9deb97593d2bc</span> &gt; pk1
+echo <span class="hljs-number">0x63d86723e08f0f813a36ce6aa123bb2289d90680ae1e99d4de8cdb334553f24d</span> &gt; pk2
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="2-import-the-private-keys"></a><a href="#2-import-the-private-keys" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. Import the Private Keys</h3>
+<p>Import the private key files using <code>ckb-cli</code>:</p>
+<pre><code class="hljs"><span class="hljs-type">CKB</span>&gt; account <span class="hljs-keyword">import</span> <span class="hljs-comment">--privkey-path pk1</span>
+<span class="hljs-type">CKB</span>&gt; account <span class="hljs-keyword">import</span> <span class="hljs-comment">--privkey-path pk2</span>
+</code></pre>
+<p><details>
+<summary>(click here to view result)</summary></p>
+<pre><code class="hljs"><span class="hljs-attr">Password:</span>
+<span class="hljs-attr">address:</span>
+  <span class="hljs-attr">mainnet:</span> <span class="hljs-string">ckb1qyqvsv5240xeh85wvnau2eky8pwrhh4jr8ts6f6daz</span>
+  <span class="hljs-attr">testnet:</span> <span class="hljs-string">ckt1qyqvsv5240xeh85wvnau2eky8pwrhh4jr8ts8vyj37</span>
+<span class="hljs-attr">lock_arg:</span> <span class="hljs-number">0xc8328aabcd9b9e8e64fbc566c4385c3bdeb219d7</span>
+<span class="hljs-attr">Password:</span>
+<span class="hljs-attr">address:</span>
+  <span class="hljs-attr">mainnet:</span> <span class="hljs-string">ckb1qyqywrwdchjyqeysjegpzw38fvandtktdhrsj8renf</span>
+  <span class="hljs-attr">testnet:</span> <span class="hljs-string">ckt1qyqywrwdchjyqeysjegpzw38fvandtktdhrs0zaxl4</span>
+<span class="hljs-attr">lock_arg:</span> <span class="hljs-string">470dcdc5e44064909650113a274b3b36aecb6dc7</span>
+</code></pre>
+<p></details></p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/basics/concepts/ckb-vm"><span class="arrow-prev">← </span><span>CKB-VM</span></a><a class="docs-next button" href="/docs/basics/guides/mainnet"><span>Run a CKB Mainnet Node</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#setup-a-dummy-worker-blockchain">Setup a Dummy-Worker Blockchain</a><ul class="toc-headings"><li><a href="#1-download-the-latest-ckb-binary">1. Download the Latest CKB Binary</a></li><li><a href="#2-initialize-the-configuration">2. Initialize the Configuration</a></li><li><a href="#3-configure-the-block-assembler">3. Configure the Block Assembler</a></li><li><a href="#4-adjust-the-parameters-to-shorten-the-block-interval-optional">4. Adjust the Parameters to Shorten the Block Interval (Optional)</a></li><li><a href="#5-start-the-ckb-node">5. Start the CKB Node</a></li><li><a href="#6-start-the-ckb-miner">6. Start the CKB Miner</a></li></ul></li><li><a href="#setup-an-eaglesong-worker-blockchain">Setup an Eaglesong-Worker Blockchain</a><ul class="toc-headings"><li><a href="#1-download-the-latest-ckb-binary-1">1. Download the Latest CKB Binary</a></li><li><a href="#3-initialize-the-configuration-with-the-miner-account">3. Initialize the Configuration with the Miner Account</a></li><li><a href="#4-change-the-pow-function-to-eaglesong">4. Change the PoW Function to Eaglesong</a></li><li><a href="#5-start-the-ckb-node-1">5. Start the CKB Node</a></li><li><a href="#6-start-the-ckb-miner-1">6. Start the CKB Miner</a></li></ul></li><li><a href="#transferring-ckbytes-using-ckb-cli">Transferring CKBytes Using <code>ckb-cli</code></a><ul class="toc-headings"><li><a href="#1-enter-the-ckb-cli-interface">1. Enter the <code>ckb-cli</code> Interface</a></li><li><a href="#2-create-a-new-account-1">2. Create a New Account</a></li><li><a href="#4-transfer-10000-ckbytes-to-the-new-account">4. Transfer 10,000 CKBytes to the New Account</a></li><li><a href="#5-check-the-new-accounts-balance">5. Check the New Account's Balance</a></li></ul></li><li><a href="#adding-the-genesis-issued-cells">Adding the Genesis Issued Cells</a><ul class="toc-headings"><li><a href="#1-create-private-key-files">1. Create Private Key Files</a></li><li><a href="#2-import-the-private-keys">2. Import the Private Keys</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div class="footerSection"><h5>Foundation</h5><a href="https://www.nervos.org/">About Us</a></div><div class="footerSection"><h5>Developer</h5><a href="https://github.com/nervosnetwork">GitHub</a><a href="https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0002-ckb/0002-ckb.md">Whitepaper</a><a href="https://github.com/nervosnetwork/rfcs">RFCs</a></div><div class="footerSection socialLinks"><a href="https://twitter.com/nervosnetwork" class="socialLink"><img src="/img/footer_twitter.png"/>Twitter</a><a href="https://medium.com/nervosnetwork" class="socialLink"><img src="/img/footer_medium.png"/>Blog</a><a href="https://t.me/nervosnetwork" class="socialLink"><img src="/img/footer_telegram.png"/>Telegram</a><a href="https://www.reddit.com/r/NervosNetwork/" class="socialLink"><img src="/img/footer_reddit.png"/>Reddit</a><a href="https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A" class="socialLink"><img src="/img/footer_youtube.png"/>YouTube</a><a href="https://talk.nervos.org/" class="socialLink"><img src="/img/footer_forum.png"/>Forum</a></div></section><section class="copyright"><span>Copyright © 2020  Nervos Foundation. All Rights Reserved.</span></section></footer><div id="oldSiteLink"><div><span>Note we&#x27;ve completely rebuilt Nervos Doc site! </span><span>For the old doc site, please see <a href="https://docs-old.nervos.org">docs-old</a>.</span></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;
