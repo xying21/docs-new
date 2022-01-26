@@ -1,22 +1,22 @@
 {
-  "docs": {
-    "Basics": [
-      "basics/introduction",
-      {
-        "type": "subcategory",
+
+	"Basics": [
+		"basics/introduction",
+		{
+        "type": "category",
         "label": "Concepts",
-        "ids": [
+        "items": [
           "basics/concepts/nervos-blockchain",
           "basics/concepts/cell-model",
           "basics/concepts/consensus",
           "basics/concepts/economics",
           "basics/concepts/ckb-vm"
-        ]
-      },
-      {
-        "type": "subcategory",
+		]
+        },
+		{
+        "type": "category",
         "label": "Guides",
-        "ids": [
+        "items": [
           "basics/guides/devchain",
           "basics/guides/mainnet",
           "basics/guides/testnet",
@@ -26,31 +26,45 @@
           "basics/guides/ckb-on-windows"
 
         ]
-      },
-      "basics/tools",
-      "basics/glossary"
-    ],
-    "Reference": [
+		},
+		"basics/tools",
+		"basics/glossary",
+		{
+        "type": "category",
+        "label": "FAQ",
+        "items": [
+          "basics/faq/general",
+          "basics/faq/address"
+        ]
+		}
+   ],
+
+
+	"Reference":[
       "reference/introduction",
       "reference/cell",
       "reference/script",
       "reference/transaction",
-      "reference/rpc",
-      "reference/ckb/ckb"
+      "reference/rpc"
     ],
-    "Labs": [
+
+
+	"Labs":[
       "labs/introduction",
       "labs/sudtbycapsule",
       "labs/lumos-nervosdao",
       "labs/capsule-dynamic-loading-tutorial"
     ],
-    "Integrate": [
+
+
+	"Integrate":[
       "integrate/introduction",
-      "integrate/integration-guide",
       "integrate/qa",
       "integrate/sdk"
     ],
-    "Essays": [
+
+
+	"Essays":[
       "essays/introduction",
       "essays/developer-materials-guide",
       "essays/rfcs",
@@ -67,5 +81,5 @@
       "essays/mint-sudt-via-contract",
 	  "essays/pw-lock"
     ]
-  }
+
 }
